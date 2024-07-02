@@ -16,13 +16,15 @@ import {
 } from "@/components/ui/table"
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontal } from "lucide-react"
+import { ListFilter, MoreHorizontal, PlusCircle } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useNavigate } from "react-router-dom"
 
@@ -51,10 +53,39 @@ const Customer = () => {
     navigate(`/customers/invoice/${id}`)
   }
   return (
-    <div>
-      <Card x-chunk="dashboard-06-chunk-0">
+    <div className="flex flex-col gap-2">
+      <div className="flex justify-end gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="h-8 gap-1">
+              <ListFilter className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Filter
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuCheckboxItem checked>
+              Active
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem>
+              Archived
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <Button size="sm" className="h-8 gap-1">
+          <PlusCircle className="h-3.5 w-3.5" />
+          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+            Add Product
+          </span>
+        </Button>
+      </div>
+      <Card>
         <CardHeader>
-          <CardTitle>Products</CardTitle>
+          <CardTitle>Customer</CardTitle>
           <CardDescription>
             Manage your products and view their sales performance.
           </CardDescription>

@@ -1,6 +1,5 @@
 import {
   Home,
-  LineChart,
   Package,
   Package2,
   PanelLeft,
@@ -12,8 +11,10 @@ import {
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 
@@ -26,9 +27,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { NavLink, Outlet, useLocation, matchPath } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils"
-import { memo } from "react"
+import React, { memo } from "react"
 
 const sidebars = [
   {
@@ -55,7 +56,7 @@ const sidebars = [
 
 export const Layout = memo(() => {
   const location = useLocation();
-  console.log(location.pathname.split('/')[1])
+  const breadcrumbs = location.pathname.split('/').filter((path) => path && isNaN(Number(path)))
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -106,51 +107,42 @@ export const Layout = memo(() => {
                   <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
                   <span className="sr-only">Acme Inc</span>
                 </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Home className="h-5 w-5" />
-                  Dashboard
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  Orders
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-foreground"
-                >
-                  <Package className="h-5 w-5" />
-                  Products
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <Users2 className="h-5 w-5" />
-                  Customers
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Settings
-                </a>
+                {sidebars.map(({ name, href, icon: IconComponent }, index) => {
+                  const isActive = location.pathname.startsWith(href);
+                  return (
+                    <NavLink
+                      key={index}
+                      to={href}
+                      className={cn("flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground", { "text-foreground": isActive })}
+                    >
+                      <IconComponent className="h-5 w-5" />
+                      <span>{name}</span>
+                    </NavLink>
+                  )
+                })}
               </nav>
             </SheetContent>
           </Sheet>
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbPage>
-                  <a href="#">Dashboard</a>
-                </BreadcrumbPage>
-              </BreadcrumbItem>
+              {breadcrumbs.map((breadcrumb, index) => (
+                <React.Fragment key={index}>
+                  {index !== 0 && <BreadcrumbSeparator />}
+                  <BreadcrumbItem>
+                    {(breadcrumbs.length - 1) === index ? (
+                      <BreadcrumbPage className="capitalize">
+                        {breadcrumb}
+                      </BreadcrumbPage>
+                    ) : (
+                      <BreadcrumbLink asChild>
+                        <Link to={`/${breadcrumb}`} className="capitalize">
+                          {breadcrumb}
+                        </Link>
+                      </BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+                </React.Fragment>
+              ))}
             </BreadcrumbList>
           </Breadcrumb>
           <div className="relative ml-auto flex-1 md:grow-0">

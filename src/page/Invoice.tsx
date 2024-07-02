@@ -3,10 +3,52 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { memo, useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
+import honda from '@/assets/image/honda.png'
+import logo_honda from '@/assets/image/logo-honda.png'
+
+const motors = [
+  {
+    name: 'HonDa',
+    icon: logo_honda,
+    image: honda,
+  },
+  {
+    name: 'Suzuki',
+    icon: logo_honda,
+    image: honda,
+  },
+  {
+    name: 'Yamka',
+    icon: logo_honda,
+    image: honda,
+  },
+  {
+    name: 'Scoopy',
+    icon: logo_honda,
+    image: honda,
+  },
+]
 
 const ComponentToPrint = memo(() => (
-  <div>
-    <h1>Hello, Printing World!</h1>
+  <div className='px-6'>
+    <div className='flex justify-around'>
+      {motors.map(({ name, icon, image }, index) => (
+        <div key={index} className=''>
+          <div className='flex'>
+            <img src={icon} alt={icon} className='w-24' />
+            <h2>{name}</h2>
+          </div>
+          <img src={image} alt={image} className='w-40' />
+        </div>
+      ))}
+    </div>
+    <div>
+      <p>THang luk Motor Ki Han</p>
+      <p>Best regards,</p>
+      <p>John Doe</p>
+      <p>Customer Service</p>
+    </div>
+    
   </div>
 ));
 
