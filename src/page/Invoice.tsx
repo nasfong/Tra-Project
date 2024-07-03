@@ -5,6 +5,10 @@ import { memo, useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import honda from '@/assets/image/honda.png'
 import logo_honda from '@/assets/image/logo-honda.png'
+import suzuki from '@/assets/image/suzuki.png'
+import logo_suzuki from '@/assets/image/logo-suzuki.png'
+import yamaha from '@/assets/image/yamaha.png'
+import logo_yamaha from '@/assets/image/logo-yamaha.png'
 
 const motors = [
   {
@@ -14,13 +18,13 @@ const motors = [
   },
   {
     name: 'Suzuki',
-    icon: logo_honda,
-    image: honda,
+    icon: logo_suzuki,
+    image: suzuki,
   },
   {
     name: 'Yamka',
-    icon: logo_honda,
-    image: honda,
+    icon: logo_yamaha,
+    image: yamaha,
   },
   {
     name: 'Scoopy',
@@ -35,10 +39,10 @@ const ComponentToPrint = memo(() => (
       {motors.map(({ name, icon, image }, index) => (
         <div key={index} className=''>
           <div className='flex'>
-            <img src={icon} alt={icon} className='w-24' />
+            <img src={icon} alt={icon} className='w-24 h-10' />
             <h2>{name}</h2>
           </div>
-          <img src={image} alt={image} className='w-40' />
+          <img src={image} alt={image} className='w-40 h-40' />
         </div>
       ))}
     </div>
@@ -48,7 +52,7 @@ const ComponentToPrint = memo(() => (
       <p>John Doe</p>
       <p>Customer Service</p>
     </div>
-    
+
   </div>
 ));
 
