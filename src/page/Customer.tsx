@@ -16,17 +16,18 @@ import {
 } from "@/components/ui/table"
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { ListFilter, MoreHorizontal, PlusCircle } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useNavigate } from "react-router-dom"
+import { CustomerFormDialog } from "@/module/customer/CustomerFormDialog"
+import { CustomerFilter } from "@/module/customer/CustomerFilter"
+import { useState } from "react"
 
 const lists = [
   {
@@ -49,39 +50,30 @@ const lists = [
 
 const Customer = () => {
   const navigate = useNavigate()
+
+  const [open, setOpen] = useState(false)
+  const [formValue, setFormValue] = useState(null)
+
+  const handleEdit = (value: any) => {
+    console.log(value)
+    setFormValue(value)
+    setOpen(true)
+  }
+
   const redirectToInvoice = (id: number) => {
     navigate(`/customers/invoice/${id}`)
   }
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-end gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 gap-1">
-              <ListFilter className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Filter
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuCheckboxItem checked>
-              Active
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem>
-              Archived
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <Button size="sm" className="h-8 gap-1">
-          <PlusCircle className="h-3.5 w-3.5" />
-          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Add Product
-          </span>
-        </Button>
+        <CustomerFilter />
+        <CustomerFormDialog
+          open={open}
+          setOpen={setOpen}
+          formValue={formValue}
+          setFormValue={setFormValue}
+        />
       </div>
       <Card>
         <CardHeader>
@@ -142,7 +134,7 @@ const Customer = () => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEdit(item)}>Edit</DropdownMenuItem>
                         <DropdownMenuItem>Delete</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => redirectToInvoice(item.id)}>Invoice</DropdownMenuItem>
                       </DropdownMenuContent>
