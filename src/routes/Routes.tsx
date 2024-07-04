@@ -3,6 +3,7 @@ import Home from "../page/Home";
 import { Layout } from "../layout/Layout";
 import Customer from "@/page/Customer";
 import Invoice from "@/page/Invoice";
+import Product from "@/page/Product";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
         loader: async () => redirect('/dashboard'),
       },
       { path: "dashboard", element: <Home /> },
+      { path: "products", element: <Product /> },
       {
         path: "customers",
         children: [

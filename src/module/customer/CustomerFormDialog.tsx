@@ -37,7 +37,14 @@ export const CustomerFormDialog = ({ open, setOpen, formValue, setFormValue }: P
 
   const defaultValues = {
     name: "",
-    type: ""
+    phone: "",
+    product: "",
+    level: "",
+    job: "",
+    province: "",
+    district: "",
+    commune: "",
+    other: "",
   }
 
   const form = useForm({
@@ -67,13 +74,13 @@ export const CustomerFormDialog = ({ open, setOpen, formValue, setFormValue }: P
         <Button size="sm" className="h-8 gap-1" onClick={() => onOpenChange(true)}>
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Add Product
+            Add Customer
           </span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{!formValue?.id ? 'Create': 'Edit'} customer</DialogTitle>
+          <DialogTitle>{!formValue?.id ? 'Create' : 'Edit'} customer</DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you're done.
           </DialogDescription>
@@ -84,10 +91,52 @@ export const CustomerFormDialog = ({ open, setOpen, formValue, setFormValue }: P
             <InputForm
               form={form}
               name="name"
-              placeholder="name"
-              label="name"
-            // description="This is your public display name."
+              placeholder="Name"
+              label="Name"
             />
+            <InputForm
+              form={form}
+              name="phone"
+              placeholder="Phone"
+              label="Phone"
+            />
+            <InputForm
+              form={form}
+              name="phone"
+              placeholder="Phone"
+              label="Phone"
+            />
+            <InputForm
+              form={form}
+              name="phone"
+              placeholder="Phone"
+              label="Phone"
+            />
+            <InputForm
+              form={form}
+              name="phone"
+              placeholder="Phone"
+              label="Phone"
+            />
+            <InputForm
+              form={form}
+              name="phone"
+              placeholder="Phone"
+              label="Phone"
+            />
+            <InputForm
+              form={form}
+              name="phone"
+              placeholder="Phone"
+              label="Phone"
+            />
+            <InputForm
+              form={form}
+              name="phone"
+              placeholder="Phone"
+              label="Phone"
+            />
+
             <SelectForm
               form={form}
               name="type"
