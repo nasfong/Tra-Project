@@ -16,6 +16,7 @@ import { Form } from "@/components/ui/form"
 import { InputForm } from "@/components/form/InputForm"
 import { SelectForm } from "@/components/form/SelectForm"
 import { useEffect } from "react"
+import { TextAreaForm } from "@/components/form/TextAreaForm"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -78,7 +79,7 @@ export const CustomerFormDialog = ({ open, setOpen, formValue, setFormValue }: P
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="min-w-[80%]">
         <DialogHeader>
           <DialogTitle>{!formValue?.id ? 'Create' : 'Edit'} customer</DialogTitle>
           <DialogDescription>
@@ -87,68 +88,74 @@ export const CustomerFormDialog = ({ open, setOpen, formValue, setFormValue }: P
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-
             <InputForm
               form={form}
               name="name"
               placeholder="Name"
               label="Name"
             />
-            <InputForm
+            <div className="grid grid-cols-2 gap-3">
+              <InputForm
+                form={form}
+                name="phone"
+                placeholder="Phone"
+                label="Phone"
+              />
+              <InputForm
+                form={form}
+                name="level"
+                placeholder="Level"
+                label="Level"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <SelectForm
+                form={form}
+                name="product"
+                placeholder="Select a product"
+                label="Product"
+                options={[
+                  { id: "1", name: "John Doe" },
+                  { id: "2", name: "Jane Doe" },
+                  { id: "3", name: "Michael Doe" },
+                ]}
+                loading={true}
+              />
+              <InputForm
+                form={form}
+                name="job"
+                placeholder="Job"
+                label="Job"
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <InputForm
+                form={form}
+                name="province"
+                placeholder="Province"
+                label="Province"
+              />
+              <InputForm
+                form={form}
+                name="district"
+                placeholder="District"
+                label="District"
+              />
+              <InputForm
+                form={form}
+                name="commune"
+                placeholder="Commune"
+                label="Commune"
+              />
+            </div>
+            <TextAreaForm
               form={form}
-              name="phone"
-              placeholder="Phone"
-              label="Phone"
-            />
-            <InputForm
-              form={form}
-              name="phone"
-              placeholder="Phone"
-              label="Phone"
-            />
-            <InputForm
-              form={form}
-              name="phone"
-              placeholder="Phone"
-              label="Phone"
-            />
-            <InputForm
-              form={form}
-              name="phone"
-              placeholder="Phone"
-              label="Phone"
-            />
-            <InputForm
-              form={form}
-              name="phone"
-              placeholder="Phone"
-              label="Phone"
-            />
-            <InputForm
-              form={form}
-              name="phone"
-              placeholder="Phone"
-              label="Phone"
-            />
-            <InputForm
-              form={form}
-              name="phone"
-              placeholder="Phone"
-              label="Phone"
+              type="textarea"
+              name="other"
+              placeholder="Other"
+              label="Other"
             />
 
-            <SelectForm
-              form={form}
-              name="type"
-              placeholder="Select a verified email to display"
-              label="Type"
-              options={[
-                { id: 1, name: "John Doe" },
-                { id: 2, name: "Jane Doe" },
-                { id: 3, name: "Michael Doe" },
-              ]}
-              loading={true}
-            />
             <DialogFooter className="mt-3">
               <Button type="submit">Save changes</Button>
             </DialogFooter>

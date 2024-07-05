@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom"
 import { CustomerFormDialog } from "@/module/customer/CustomerFormDialog"
 import { CustomerFilter } from "@/module/customer/CustomerFilter"
 import { useState } from "react"
+import { PaginationDemo } from "@/components/custom/PaginationDemo"
 
 const lists = [
   {
@@ -145,11 +146,12 @@ const Customer = () => {
             </TableBody>
           </Table>
         </CardContent>
-        <CardFooter>
-          <div className="text-xs text-muted-foreground">
+        <CardFooter className='flex justify-between'>
+          <div className="text-xs text-muted-foreground sr-only sm:not-sr-only">
             Showing <strong>1-10</strong> of <strong>32</strong>{" "}
             products
           </div>
+          <PaginationDemo />
         </CardFooter>
       </Card>
     </div>
