@@ -38,8 +38,8 @@ export function PaginationDemo() {
             <PaginationItem onClick={() => onClickPage(page)} key={index}>
               <PaginationLink isActive={currentPage === page}>{page}</PaginationLink>
             </PaginationItem>
-          ) : index === 0 || index === currentPage + 2 ? (
-            <PaginationItem key={index}>
+          ) : index === 0 || index === currentPage + 1 ? (
+            <PaginationItem key={index} className='pointer-events-none'>
               <PaginationEllipsis />
             </PaginationItem>
           ) : null
