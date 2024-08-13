@@ -1,33 +1,50 @@
-import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom";
-import Home from "../page/Home";
-import { Layout } from "../layout/Layout";
-import Customer from "@/page/Customer";
-import Invoice from "@/page/Invoice";
-import Product from "@/page/Product";
+import React from 'react';
+import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
+import Home from '../page/Home';
+import { Layout } from '../layout/Layout';
+import Customer from '@/page/Customer';
+import Invoice from '@/page/Invoice';
+import Product from '@/page/Product';
+import Login from '@/page/Login';
+import { PrivateRoutes } from './PrivateRoutes';
+import { AuthProvider } from '@/context/ContextProvider';
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Layout />,
-    errorElement: <>Page Not Fount</>,
+    path: 'login',
+    element: <Login />,
+  },
+  {
+    element: <PrivateRoutes />,
     children: [
       {
-        index: true,
-        loader: async () => redirect('/dashboard'),
-      },
-      { path: "dashboard", element: <Home /> },
-      { path: "products", element: <Product /> },
-      {
-        path: "customers",
+        path: '/',
+        element: <Layout />,
+        errorElement: <>Page Not Found</>,
         children: [
-          { index: true, element: <Customer /> },
-          { path: "invoice/:cId", element: <Invoice /> },
-        ]
+          {
+            index: true,
+            loader: async () => redirect('/dashboard'),
+          },
+          { path: 'dashboard', element: <Home /> },
+          { path: 'products', element: <Product /> },
+          {
+            path: 'customers',
+            children: [
+              { index: true, element: <Customer /> },
+              { path: 'invoice/:cId', element: <Invoice /> },
+            ],
+          },
+        ],
       },
-    ]
+    ],
   },
 ]);
 
-const Routes = () => <RouterProvider router={router} />
+const Routes: React.FC = () => (
+  <AuthProvider>
+    <RouterProvider router={router} />
+  </AuthProvider>
+);
 
-export default Routes 
+export default Routes;
