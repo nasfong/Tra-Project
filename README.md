@@ -6,3 +6,9 @@
 - React Hook Form | https://www.react-hook-form.com/
 - Zod | https://zod.dev/
 - React To Print | https://www.npmjs.com/package/react-to-print
+
+  # Git
+
+-  git add .
+-  git commit -m '...'
+-  git push
