@@ -6,6 +6,7 @@ import {
   Search,
   ShoppingCart,
   Users2,
+  ClipboardType,
 } from "lucide-react"
 
 import {
@@ -52,6 +53,11 @@ const sidebars = [
     name: "Users2",
     icon: Users2,
     href: "/customers",
+  },
+  {
+    name: "Types",
+    icon: ClipboardType,
+    href: "/types",
   },
 ]
 

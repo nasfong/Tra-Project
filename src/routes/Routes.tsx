@@ -8,6 +8,7 @@ import Product from '@/page/Product';
 import Login from '@/page/Login';
 import { PrivateRoutes } from './PrivateRoutes';
 import { AuthProvider } from '@/context/ContextProvider';
+import Types from '@/page/Types';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
           },
           { path: 'dashboard', element: <Home /> },
           { path: 'products', element: <Product /> },
+          { path: 'types', element: <Types/>},
           {
             path: 'customers',
             children: [
