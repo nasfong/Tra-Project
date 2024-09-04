@@ -6,7 +6,7 @@ import {
   Search,
   ShoppingCart,
   Users2,
-} from "lucide-react"
+} from "lucide-react";
 
 import {
   Breadcrumb,
@@ -15,22 +15,29 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 
-import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { cn } from "@/lib/utils"
-import React, { memo } from "react"
-import { Toaster } from "sonner"
+} from "@/components/ui/tooltip";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import React, { memo } from "react";
+import { Toaster } from "sonner";
 
 const sidebars = [
   {
@@ -53,11 +60,18 @@ const sidebars = [
     icon: Users2,
     href: "/customers",
   },
-]
+  {
+    name: "Types",
+    icon: Users2,
+    href: "/types",
+  },
+];
 
 export const Layout = memo(() => {
   const location = useLocation();
-  const breadcrumbs = location.pathname.split('/').filter((path) => path && isNaN(Number(path)))
+  const breadcrumbs = location.pathname
+    .split("/")
+    .filter((path) => path && isNaN(Number(path)));
   return (
     <>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -78,7 +92,10 @@ export const Layout = memo(() => {
                     <TooltipTrigger asChild>
                       <NavLink
                         to={href}
-                        className={cn("flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8", { "bg-accent": isActive })}
+                        className={cn(
+                          "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
+                          { "bg-accent": isActive }
+                        )}
                       >
                         <IconComponent className="h-5 w-5" />
                         <span className="sr-only">{name}</span>
@@ -86,7 +103,7 @@ export const Layout = memo(() => {
                     </TooltipTrigger>
                     <TooltipContent side="right">{name}</TooltipContent>
                   </Tooltip>
-                )
+                );
               })}
             </TooltipProvider>
           </nav>
@@ -103,24 +120,30 @@ export const Layout = memo(() => {
               <SheetContent side="left" className="sm:max-w-xs">
                 <nav className="grid gap-6 text-lg font-medium">
                   <SheetHeader className="">
-                    <SheetTitle> <Package2 className="h-5 w-5 transition-all group-hover:scale-110" /></SheetTitle>
-                    <SheetDescription>
-                      Acme Inc
-                    </SheetDescription>
+                    <SheetTitle>
+                      {" "}
+                      <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
+                    </SheetTitle>
+                    <SheetDescription>Acme Inc</SheetDescription>
                   </SheetHeader>
-                  {sidebars.map(({ name, href, icon: IconComponent }, index) => {
-                    const isActive = location.pathname.startsWith(href);
-                    return (
-                      <NavLink
-                        key={index}
-                        to={href}
-                        className={cn("flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground", { "text-foreground": isActive })}
-                      >
-                        <IconComponent className="h-5 w-5" />
-                        <span>{name}</span>
-                      </NavLink>
-                    )
-                  })}
+                  {sidebars.map(
+                    ({ name, href, icon: IconComponent }, index) => {
+                      const isActive = location.pathname.startsWith(href);
+                      return (
+                        <NavLink
+                          key={index}
+                          to={href}
+                          className={cn(
+                            "flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground",
+                            { "text-foreground": isActive }
+                          )}
+                        >
+                          <IconComponent className="h-5 w-5" />
+                          <span>{name}</span>
+                        </NavLink>
+                      );
+                    }
+                  )}
                 </nav>
               </SheetContent>
             </Sheet>
@@ -130,7 +153,7 @@ export const Layout = memo(() => {
                   <React.Fragment key={index}>
                     {index !== 0 && <BreadcrumbSeparator />}
                     <BreadcrumbItem>
-                      {(breadcrumbs.length - 1) === index ? (
+                      {breadcrumbs.length - 1 === index ? (
                         <BreadcrumbPage className="capitalize">
                           {breadcrumb}
                         </BreadcrumbPage>
@@ -163,5 +186,5 @@ export const Layout = memo(() => {
       {/* package declare */}
       <Toaster />
     </>
-  )
-})
+  );
+});
