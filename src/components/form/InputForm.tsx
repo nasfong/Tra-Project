@@ -1,24 +1,24 @@
 import { forwardRef } from 'react';
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'; // Adjust import paths as needed
 import { Input } from '../ui/input';
-// import { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 
-// type FormInputProps<T extends FieldValues> = {
-//   form: UseFormReturn<T, any, undefined>
-//   name: Path<T>
-// }
-
-// export const FormInput = forwardRef<HTMLDivElement, FormInputProps<FieldValues>>(({ form, name, ...props }, ref) => {
-export const InputForm = forwardRef<HTMLDivElement, any>(({ form, name, label, description, ...props }, ref) => {
+export const InputForm = forwardRef<HTMLDivElement, any>(({ name, label, description, ...props }, ref) => {
   return (
     <FormField
-      control={form.control}
       name={name}
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input {...field} {...props} ref={ref} />
+            <Input
+              {...field}
+              {...props}
+              value={field.value || ''} // Ensure value is always controlled
+              onChange={(event) => {
+                const value = props.type === 'number' ? parseFloat(event.target.value) : event.target.value;
+                field.onChange(value);
+              }}
+            />
           </FormControl>
           {!!description && (
             <FormDescription>
@@ -31,3 +31,5 @@ export const InputForm = forwardRef<HTMLDivElement, any>(({ form, name, label, d
     />
   );
 });
+
+InputForm.displayName = "InputForm";
