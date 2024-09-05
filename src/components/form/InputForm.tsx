@@ -13,11 +13,12 @@ export const InputForm = forwardRef<HTMLDivElement, any>(({ name, label, descrip
             <Input
               {...field}
               {...props}
-              value={field.value || ''} // Ensure value is always controlled
+              value={field.value || ''}
               onChange={(event) => {
                 const value = props.type === 'number' ? parseFloat(event.target.value) : event.target.value;
                 field.onChange(value);
               }}
+              ref={ref}
             />
           </FormControl>
           {!!description && (

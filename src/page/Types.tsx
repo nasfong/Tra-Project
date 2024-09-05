@@ -26,18 +26,23 @@ import { MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { TypesFormDialog } from "@/module/types/TypesFormDialog";
-import { useQueryTypes } from "@/hook/types";
+import { useDeleteType, useQueryTypes } from "@/hook/types";
 
 const Types = () => {
   const [open, setOpen] = useState(false);
   const [formValue, setFormValue] = useState(null);
 
   const { data } = useQueryTypes();
+  const { mutate: deleteMutation } = useDeleteType()
+
 
   const handleEdit = (value: any) => {
     setFormValue(value);
     setOpen(true);
   };
+  const onDelete = (id: string) => {
+    deleteMutation(id)
+  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -91,7 +96,7 @@ const Types = () => {
                         <DropdownMenuItem onClick={() => handleEdit(item)}>
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onDelete(item._id)}>Delete</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

@@ -35,7 +35,7 @@ export const TypesFormDialog = ({
   formValue,
   setFormValue,
 }: Props) => {
-  const { mutate } = useSubmitType(formValue?._id);
+  const { mutateAsync } = useSubmitType(formValue?._id);
 
   const defaultValues = {
     name: "",
@@ -61,14 +61,7 @@ export const TypesFormDialog = ({
   };
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    // mutate(data);
-    // toast("Event has been created", {
-    //   description: JSON.stringify(data, null, 2),
-    //   action: {
-    //     label: "Undo",
-    //     onClick: () => console.log("Undo"),
-    //   },
-    // });
+    mutateAsync(data).finally(() => setOpen(false))
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -84,7 +77,7 @@ export const TypesFormDialog = ({
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-[60%]">
+      <DialogContent className="min-w-[60%]" onOpenAutoFocus={e => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>{!formValue?._id ? "Create" : "Edit"} Type</DialogTitle>
           <DialogDescription>product information form.</DialogDescription>
@@ -96,16 +89,15 @@ export const TypesFormDialog = ({
           >
             <div className="grid grid-cols-2 gap-3">
               <InputForm
-                form={form}
                 name="name"
                 placeholder="name"
                 label="Model"
               />
               <InputForm
-                form={form}
                 name="order"
                 placeholder="order"
                 label="Order"
+                type="number"
               />
             </div>
             <DialogFooter className="mt-3">
