@@ -6,9 +6,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useState } from "react";
-import { TypesFormDialog } from "@/module/types/TypesFormDialog";
+import { TypesFormDialog } from "@/module/types/type-dialog";
 import { useDeleteType, useQueryTypes } from "@/hook/types";
-import TypesItem from "@/module/types/TypesItem";
+import TypesItem from "@/module/types/type-item";
 
 const Types = () => {
   const [open, setOpen] = useState(false);

@@ -5,7 +5,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -13,19 +13,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { MoreHorizontal } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { ProductFormDialog } from "@/module/product/ProductFormDialog"
-import { useState } from "react"
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ProductFormDialog } from "@/module/product/product-dialog";
+import { useState } from "react";
 
 const lists = [
   {
@@ -52,17 +52,16 @@ const lists = [
     totalSales: "100",
     createdAt: "2023-10-18 03:21 PM",
   },
-]
+];
 
 const Product = () => {
-
-  const [open, setOpen] = useState(false)
-  const [formValue, setFormValue] = useState(null)
+  const [open, setOpen] = useState(false);
+  const [formValue, setFormValue] = useState(null);
 
   const handleEdit = (value: any) => {
-    setFormValue(value)
-    setOpen(true)
-  }
+    setFormValue(value);
+    setOpen(true);
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -87,9 +86,7 @@ const Product = () => {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="hidden md:table-cell">
-                  Price
-                </TableHead>
+                <TableHead className="hidden md:table-cell">Price</TableHead>
                 <TableHead className="hidden md:table-cell">
                   Total Sales
                 </TableHead>
@@ -104,9 +101,7 @@ const Product = () => {
             <TableBody>
               {lists.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell className="font-medium">
-                    {item.name}
-                  </TableCell>
+                  <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{item.status}</Badge>
                   </TableCell>
@@ -133,7 +128,9 @@ const Product = () => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleEdit(item)}>Edit</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEdit(item)}>
+                          Edit
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Delete</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -145,13 +142,12 @@ const Product = () => {
         </CardContent>
         <CardFooter>
           <div className="text-xs text-muted-foreground">
-            Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-            products
+            Showing <strong>1-10</strong> of <strong>32</strong> products
           </div>
         </CardFooter>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default Product
+export default Product;
