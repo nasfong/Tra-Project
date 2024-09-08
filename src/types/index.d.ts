@@ -1,5 +1,5 @@
 type Types = {
-  _id: string;
+  id: string;
   name: string;
-  order?: number;
+  order: number;
 };

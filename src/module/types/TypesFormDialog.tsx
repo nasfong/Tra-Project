@@ -19,7 +19,7 @@ import { useSubmitType } from "@/hook/types";
 
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Model is required!" }),
-  order: z.number(),
+  // order: z.number().optional(),
 });
 
 type Props = {
@@ -35,11 +35,11 @@ export const TypesFormDialog = ({
   formValue,
   setFormValue,
 }: Props) => {
-  const { mutateAsync } = useSubmitType(formValue?._id);
+  const { mutateAsync } = useSubmitType(formValue?.id);
 
   const defaultValues = {
     name: "",
-    order: 0,
+    // order: undefined,
   };
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,7 +53,6 @@ export const TypesFormDialog = ({
 
   const onOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
-    // close with clear value
     if (!isOpen) {
       form.reset();
       setFormValue(defaultValues);
@@ -61,7 +60,7 @@ export const TypesFormDialog = ({
   };
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    mutateAsync(data).finally(() => setOpen(false))
+    mutateAsync(data).finally(() => onOpenChange(false));
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -77,9 +76,12 @@ export const TypesFormDialog = ({
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-[60%]" onOpenAutoFocus={e => e.preventDefault()}>
+      <DialogContent
+        className="min-w-[60%]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
-          <DialogTitle>{!formValue?._id ? "Create" : "Edit"} Type</DialogTitle>
+          <DialogTitle>{!formValue?.id ? "Create" : "Edit"} Type</DialogTitle>
           <DialogDescription>product information form.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -87,19 +89,7 @@ export const TypesFormDialog = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
-            <div className="grid grid-cols-2 gap-3">
-              <InputForm
-                name="name"
-                placeholder="name"
-                label="Model"
-              />
-              <InputForm
-                name="order"
-                placeholder="order"
-                label="Order"
-                type="number"
-              />
-            </div>
+            <InputForm name="name" placeholder="name" label="Model" />
             <DialogFooter className="mt-3">
               <Button type="submit">Save changes</Button>
             </DialogFooter>

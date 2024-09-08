@@ -13,6 +13,7 @@ import Login from "@/page/Login";
 import { PrivateRoutes } from "./PrivateRoutes";
 import { AuthProvider } from "@/context/ContextProvider";
 import Types from "@/page/Types";
+import NotFound from "@/module/not-found";
 
 const router = createBrowserRouter([
   {
@@ -25,17 +26,17 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Layout />,
-        errorElement: <>Page Not Found</>,
+        errorElement: <>Page Error</>,
         children: [
           {
             index: true,
             loader: async () => redirect("/dashboard"),
           },
           { path: "dashboard", element: <Home /> },
-          { path: "products", element: <Product /> },
+          { path: "product", element: <Product /> },
           { path: "types", element: <Types /> },
           {
-            path: "customers",
+            path: "customer",
             children: [
               { index: true, element: <Customer /> },
               { path: "invoice/:cId", element: <Invoice /> },
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

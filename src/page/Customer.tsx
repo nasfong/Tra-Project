@@ -5,7 +5,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -13,22 +13,22 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { MoreHorizontal } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { useNavigate } from "react-router-dom"
-import { CustomerFormDialog } from "@/module/customer/CustomerFormDialog"
-import { CustomerFilter } from "@/module/customer/CustomerFilter"
-import { useState } from "react"
-import { PaginationDemo } from "@/components/custom/PaginationDemo"
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
+import { CustomerFormDialog } from "@/module/customer/CustomerFormDialog";
+import { CustomerFilter } from "@/module/customer/CustomerFilter";
+import { useState } from "react";
+import { PaginationDemo } from "@/components/custom/PaginationDemo";
 
 const lists = [
   {
@@ -47,23 +47,23 @@ const lists = [
     totalSales: "100",
     createdAt: "2023-10-18 03:21 PM",
   },
-]
+];
 
 const Customer = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [open, setOpen] = useState(false)
-  const [formValue, setFormValue] = useState(null)
+  const [open, setOpen] = useState(false);
+  const [formValue, setFormValue] = useState(null);
 
   const handleEdit = (value: any) => {
-    console.log(value)
-    setFormValue(value)
-    setOpen(true)
-  }
+    console.log(value);
+    setFormValue(value);
+    setOpen(true);
+  };
 
   const redirectToInvoice = (id: number) => {
-    navigate(`/customers/invoice/${id}`)
-  }
+    navigate(`/customer/invoice/${id}`);
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -89,9 +89,7 @@ const Customer = () => {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="hidden md:table-cell">
-                  Price
-                </TableHead>
+                <TableHead className="hidden md:table-cell">Price</TableHead>
                 <TableHead className="hidden md:table-cell">
                   Total Sales
                 </TableHead>
@@ -106,9 +104,7 @@ const Customer = () => {
             <TableBody>
               {lists.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell className="font-medium">
-                    {item.name}
-                  </TableCell>
+                  <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{item.status}</Badge>
                   </TableCell>
@@ -135,9 +131,15 @@ const Customer = () => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleEdit(item)}>Edit</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEdit(item)}>
+                          Edit
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Delete</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => redirectToInvoice(item.id)}>Invoice</DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => redirectToInvoice(item.id)}
+                        >
+                          Invoice
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -146,16 +148,15 @@ const Customer = () => {
             </TableBody>
           </Table>
         </CardContent>
-        <CardFooter className='flex justify-between'>
+        <CardFooter className="flex justify-between">
           <div className="text-xs text-muted-foreground sr-only sm:not-sr-only">
-            Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-            products
+            Showing <strong>1-10</strong> of <strong>32</strong> products
           </div>
           <PaginationDemo />
         </CardFooter>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default Customer
+export default Customer;

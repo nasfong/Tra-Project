@@ -19,8 +19,24 @@ export const useSubmitType = (id?: string) => {
     mutationFn: (data: any) =>
       id ? axios.put(`/type/${id}`, data) : axios.post(`/type`, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['types'] })
+      queryClient.invalidateQueries({ queryKey: ["types"] });
       toast.success(id ? "Type has been updated" : "Type has been created");
+    },
+    onError: (error: any) => {
+      const errorMessage =
+        error.response?.data?.message || error.message || "An error occurred";
+      toast.error(`Error: ${errorMessage}`);
+    },
+  });
+};
+
+export const useUpdateType = () => {
+  // const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: any) => axios.put(`/type-order`, data),
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ["types"] });
+      toast.success("Type has been updated");
     },
     onError: (error: any) => {
       const errorMessage =
@@ -37,12 +53,13 @@ export const useDeleteType = () => {
       return axios.delete(`/type/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['types'] })
-      toast.success("Type deleted successfully!")
+      queryClient.invalidateQueries({ queryKey: ["types"] });
+      toast.success("Type deleted successfully!");
     },
     onError: (error: any) => {
       const status = error.response?.status;
-      const errorMessage = error.response?.data?.message || error.message || "An error occurred";
+      const errorMessage =
+        error.response?.data?.message || error.message || "An error occurred";
 
       if (status === 400) {
         toast.warning(errorMessage);
@@ -52,5 +69,5 @@ export const useDeleteType = () => {
         toast.error(`Error deleting type: ${errorMessage}`);
       }
     },
-  })
-}
+  });
+};

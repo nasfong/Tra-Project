@@ -2,47 +2,28 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { TypesFormDialog } from "@/module/types/TypesFormDialog";
 import { useDeleteType, useQueryTypes } from "@/hook/types";
+import TypesItem from "@/module/types/TypesItem";
 
 const Types = () => {
   const [open, setOpen] = useState(false);
   const [formValue, setFormValue] = useState(null);
 
   const { data } = useQueryTypes();
-  const { mutate: deleteMutation } = useDeleteType()
-
+  const { mutate: deleteMutation } = useDeleteType();
 
   const handleEdit = (value: any) => {
     setFormValue(value);
     setOpen(true);
   };
   const onDelete = (id: string) => {
-    deleteMutation(id)
-  }
+    deleteMutation(id);
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -56,60 +37,20 @@ const Types = () => {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Product</CardTitle>
+          <CardTitle>Types</CardTitle>
           <CardDescription>
             Manage your products and view their sales performance.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Order</TableHead>
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data?.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">{item.name}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{item.order}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleEdit(item)}>
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onDelete(item._id)}>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          {data && (
+            <TypesItem
+              items={data}
+              onDelete={onDelete}
+              handleEdit={handleEdit}
+            />
+          )}
         </CardContent>
-        <CardFooter>
-          <div className="text-xs text-muted-foreground">
-            Showing <strong>1-10</strong> of <strong>32</strong> products
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );
