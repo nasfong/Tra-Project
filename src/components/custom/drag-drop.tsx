@@ -14,7 +14,7 @@ import {
 import { memo, ReactNode } from "react";
 import { CSS } from "@dnd-kit/utilities";
 
-type DragDropProps<T extends { id: string }> = {
+type DragDropProps<T> = {
   children: (item: T, index: number) => ReactNode;
   handleDragEnd?: (event: any) => void;
   data: T[];
