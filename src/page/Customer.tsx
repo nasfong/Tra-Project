@@ -25,10 +25,10 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { CustomerFormDialog } from "@/module/customer/CustomerFormDialog";
-import { CustomerFilter } from "@/module/customer/CustomerFilter";
+import { CustomerFormDialog } from "@/module/customer/customer-dialog";
+import { CustomerFilter } from "@/module/customer/customer-filter";
 import { useState } from "react";
-import { PaginationDemo } from "@/components/custom/PaginationDemo";
+import { PaginationDemo } from "@/components/custom/pagination-demo";
 
 const lists = [
   {

@@ -13,10 +13,10 @@ import { useForm } from "react-hook-form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form } from "@/components/ui/form"
-import { InputForm } from "@/components/form/InputForm"
-import { SelectForm } from "@/components/form/SelectForm"
+import { InputForm } from "@/components/form/input-form"
+import { SelectForm } from "@/components/form/select-form"
 import { useEffect } from "react"
-import { TextAreaForm } from "@/components/form/TextAreaForm"
+import { TextAreaForm } from "@/components/form/textarea-form"
 
 const formSchema = z.object({
   name: z.string().min(2, {

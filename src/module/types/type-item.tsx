@@ -17,24 +17,29 @@ import {
 } from "@dnd-kit/sortable";
 import { forwardRef, memo, useCallback, useEffect, useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
-import { useUpdateType } from "@/hook/types";
+import { useDeleteType, useUpdateType } from "@/hook/types";
 import { TypesAction } from "./types-action";
 
 const TypesItem = memo(
   ({
     items,
-    onDelete,
     handleEdit,
   }: {
     items: Types[];
-    onDelete: (id: string) => void;
     handleEdit: (item: Types) => void;
   }) => {
     const [data, setData] = useState(items);
     const [activeId, setActiveId] = useState<string | null>(null);
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+    const { mutateAsync: mutateAsyncDelete, isPending: isPendingDelete } = useDeleteType();
 
     const { mutate: updateMutation } = useUpdateType();
+
+    const onDelete = (id: string) => {
+      return mutateAsyncDelete(id)
+        .then(() => true)
+        .catch(() => false);
+    };
 
     useEffect(() => {
       setData(items);
@@ -74,28 +79,6 @@ const TypesItem = memo(
       setActiveId(null);
     }, []);
 
-    const Grid = ({
-      children,
-      columns,
-    }: {
-      children: React.ReactNode;
-      columns: number;
-    }) => {
-      return (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
-            gridGap: 10,
-            maxWidth: "800px",
-            margin: "100px auto",
-          }}
-        >
-          {children}
-        </div>
-      );
-    };
-
     const Item = forwardRef<
       HTMLDivElement,
       {
@@ -105,12 +88,11 @@ const TypesItem = memo(
         isDragging?: boolean;
         style?: React.CSSProperties;
       }
-    >(({ id, name, order, isDragging, style, ...props }, ref) => {
+    >(({ name, isDragging, style, ...props }, ref) => {
       const inlineStyles: React.CSSProperties = {
         opacity: isDragging ? 0.5 : 1,
         transformOrigin: "50% 50%",
-        height: "140px",
-        width: "140px",
+        height: "50px",
         borderRadius: "10px",
         cursor: isDragging ? "grabbing" : "grab",
         backgroundColor: "#ffffff",
@@ -174,12 +156,13 @@ const TypesItem = memo(
           items={data.map((item) => item.id)}
           strategy={rectSortingStrategy}
         >
-          <Grid columns={5}>
+          <div className='grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2'>
             {data.map((item) => (
               <TypesAction
                 key={item.id}
                 onEdit={() => handleEdit(item)}
                 onDelete={() => onDelete(item.id)}
+                loading={isPendingDelete}
               >
                 <SortableItem
                   id={item.id}
@@ -188,7 +171,7 @@ const TypesItem = memo(
                 />
               </TypesAction>
             ))}
-          </Grid>
+          </div>
         </SortableContext>
         <DragOverlay adjustScale style={{ transformOrigin: "0 0 " }}>
           {activeId ? (

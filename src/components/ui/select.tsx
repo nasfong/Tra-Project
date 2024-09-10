@@ -8,7 +8,7 @@ import {
 import * as SelectPrimitive from "@radix-ui/react-select"
 
 import { cn } from "@/lib/utils"
-import { LoadingSpinner } from "../custom/LoadingSpinner"
+import { LoadingSpinner } from "../custom/loading-spinner"
 
 const Select = SelectPrimitive.Root
 

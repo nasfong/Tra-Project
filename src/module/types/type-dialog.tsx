@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import { InputForm } from "@/components/form/InputForm";
+import { InputForm } from "@/components/form/input-form";
 import { useEffect } from "react";
 import { useSubmitType } from "@/hook/types";
 

@@ -1,4 +1,4 @@
-import { Navigation } from '@/components/custom/Navigation'
+import { Navigation } from '@/components/custom/navigate'
 import { memo } from 'react'
 
 const Navbar = memo(() => {

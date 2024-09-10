@@ -7,23 +7,25 @@ import {
 } from "@/components/ui/card";
 import { useState } from "react";
 import { TypesFormDialog } from "@/module/types/type-dialog";
-import { useDeleteType, useQueryTypes } from "@/hook/types";
+import { useQueryTypes } from "@/hook/types";
 import TypesItem from "@/module/types/type-item";
+import { Skeleton } from "@/components/ui/skeleton";
+import DragDrop from "@/components/custom/drag-drop";
+import { TypesAction } from "@/module/types/types-action";
 
 const Types = () => {
   const [open, setOpen] = useState(false);
   const [formValue, setFormValue] = useState(null);
 
-  const { data } = useQueryTypes();
-  const { mutate: deleteMutation } = useDeleteType();
+  // hook
+  const { data, isLoading } = useQueryTypes();
 
+  // edit
   const handleEdit = (value: any) => {
     setFormValue(value);
     setOpen(true);
   };
-  const onDelete = (id: string) => {
-    deleteMutation(id);
-  };
+
 
   return (
     <div className="flex flex-col gap-2">
@@ -43,13 +45,30 @@ const Types = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {data && (
+          {isLoading && Array(3).fill(null).map((_, index) => (
+            <Skeleton key={index} className="h-[267px] rounded-xl" />
+          ))}
+          {/* {data && (
             <TypesItem
               items={data}
-              onDelete={onDelete}
               handleEdit={handleEdit}
             />
+          )} */}
+          {data && (
+            <DragDrop data={data} handleDragEnd={(e) => console.log(e)}>
+              {(item, index) => (
+                <TypesAction
+                  key={index}
+                  onEdit={() => null}
+                  onDelete={() => null}
+                  loading={false}
+                >
+                  <div>{item.name}</div>
+                </TypesAction>
+              )}
+            </DragDrop>
           )}
+
         </CardContent>
       </Card>
     </div>
