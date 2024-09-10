@@ -1,45 +1,59 @@
-import { InputForm } from "@/components/form/input-form"
-import { SelectForm } from "@/components/form/select-form"
-import Upload from "@/components/form/upload"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Form } from "@/components/ui/form"
-import { useQueryTypes } from "@/hook/types"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Constant } from "@/lib/constant"
-import { TextAreaForm } from "@/components/form/textarea-form"
-import { Ratings } from "@/components/custom/rating"
-import { CheckboxForm } from "@/components/form/checkbox-form"
-import { Button } from "@/components/ui/button"
-import { AddTypeDialog } from "./add-type-dialog"
-import { useSubmitProduct } from "@/hook/product"
-
+import { InputForm } from "@/components/form/input-form";
+import { SelectForm } from "@/components/form/select-form";
+import Upload from "@/components/form/upload";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Form } from "@/components/ui/form";
+import { useQueryTypes } from "@/hook/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Constant } from "@/lib/constant";
+import { TextAreaForm } from "@/components/form/textarea-form";
+import { Ratings } from "@/components/custom/rating";
+import { CheckboxForm } from "@/components/form/checkbox-form";
+import { Button } from "@/components/ui/button";
+import { AddTypeDialog } from "./add-type-dialog";
+import { useSubmitProduct } from "@/hook/product";
 
 type Props = {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  formValue: Product | null
-  setFormValue: React.Dispatch<React.SetStateAction<Product | null>>
-}
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  formValue: Product | null;
+  setFormValue: React.Dispatch<React.SetStateAction<Product | null>>;
+};
 
-export const ProductDialog = ({ open, setOpen, formValue, setFormValue }: Props) => {
-  const { data: typeData, isLoading: typeLoading } = useQueryTypes()
-  const { mutateAsync, isPending } = useSubmitProduct(formValue?.id)
+export const ProductDialog = ({
+  open,
+  setOpen,
+  formValue,
+  setFormValue,
+}: Props) => {
+  const { data: typeData, isLoading: typeLoading } = useQueryTypes({
+    fetch: open,
+  });
+  const { mutateAsync, isPending } = useSubmitProduct(formValue?.id);
 
   const formSchema = z.object({
     file: z.any().optional(),
     image: z.any().optional(),
-    name: z.string().nonempty('required'),
-    price: z.string().nonempty('required'),
+    name: z.string().nonempty("required"),
+    price: z.string().nonempty("required"),
     description: z.string().optional(),
-    type: z.string().nonempty('required'),
+    type: z.string().nonempty("required"),
     isNews: z.boolean().default(false),
     isSold: z.number().default(1),
     recommend: z.boolean().default(false),
     star: z.number(),
-  })
+  });
 
   // default value
   const defaultValues = {
@@ -53,20 +67,20 @@ export const ProductDialog = ({ open, setOpen, formValue, setFormValue }: Props)
     isSold: 1,
     recommend: false,
     star: 5,
-  }
+  };
   // hook form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: defaultValues
-  })
+    defaultValues: defaultValues,
+  });
   const onChangeModal = (isOpen: boolean) => {
-    setOpen(isOpen)
+    setOpen(isOpen);
     if (!isOpen) {
-      setOpen(false)
-      form.reset(defaultValues)
-      setFormValue(null)
+      setOpen(false);
+      form.reset(defaultValues);
+      setFormValue(null);
     }
-  }
+  };
   // handle submit
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
@@ -75,21 +89,20 @@ export const ProductDialog = ({ open, setOpen, formValue, setFormValue }: Props)
         formData.append(`file`, data.file[i]);
       }
     }
-    formData.append('image', JSON.stringify(data.image));
-    formData.append('name', data.name);
-    formData.append('price', data.price);
-    formData.append('description', data.description || '');
-    formData.append('type', data.type);
-    formData.append('isNews', data.isNews.toString());
-    formData.append('isSold', data.isSold.toString());
-    formData.append('recommend', data.recommend.toString());
-    formData.append('star', data.star.toString());
+    formData.append("image", JSON.stringify(data.image));
+    formData.append("name", data.name);
+    formData.append("price", data.price);
+    formData.append("description", data.description || "");
+    formData.append("type", data.type);
+    formData.append("isNews", data.isNews.toString());
+    formData.append("isSold", data.isSold.toString());
+    formData.append("recommend", data.recommend.toString());
+    formData.append("star", data.star.toString());
 
-    mutateAsync(formData)
-      .finally(() => {
-        onChangeModal(false)
-      })
-  }
+    mutateAsync(formData).finally(() => {
+      onChangeModal(false);
+    });
+  };
 
   // get edit
   useEffect(() => {
@@ -104,80 +117,66 @@ export const ProductDialog = ({ open, setOpen, formValue, setFormValue }: Props)
         isNews: formValue.isNews,
         star: formValue.star,
         recommend: formValue.recommend,
-      })
+      });
     }
-  }, [form, formValue])
-
+  }, [form, formValue]);
 
   return (
     <Dialog open={open} onOpenChange={onChangeModal}>
       <DialogTrigger asChild></DialogTrigger>
       <DialogContent className="min-w-[60%]">
         <DialogHeader>
-          <DialogTitle>{!formValue?.id ? 'Create Product' : 'Edit Product'}</DialogTitle>
-          <DialogDescription>
-            product information form
-          </DialogDescription>
+          <DialogTitle>
+            {!formValue?.id ? "Create Product" : "Edit Product"}
+          </DialogTitle>
+          <DialogDescription>product information form</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2">
-            <Upload
-              form={form}
-              name="file"
-            />
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-2"
+          >
+            <Upload form={form} name="file" />
             <div className="grid grid-cols-2 gap-3">
-              <InputForm
-                name="name"
-                label={'Name'}
-                placeholder={'Name'}
-              />
-              <InputForm
-                name="price"
-                label='Price'
-                placeholder='Price'
-              />
+              <InputForm name="name" label={"Name"} placeholder={"Name"} />
+              <InputForm name="price" label="Price" placeholder="Price" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <SelectForm
                 name="type"
-                label='Model'
-                placeholder='Select a Model'
-                addMoreComponent={
-                  <AddTypeDialog />
-                }
+                label="Model"
+                placeholder="Select a Model"
+                addMoreComponent={<AddTypeDialog />}
                 options={typeData}
                 loading={typeLoading}
               />
               <SelectForm
                 name="isSold"
                 options={Constant.stock}
-                label='Stock'
-                placeholder='Select a Stock'
+                label="Stock"
+                placeholder="Select a Stock"
               />
             </div>
             <TextAreaForm
               name="description"
-              label='Description'
-              placeholder='Description'
+              label="Description"
+              placeholder="Description"
             />
-            <Ratings rating={form.getValues('star')} variant="yellow" onRatingChange={(value) => form.setValue('star', value)} />
-            <CheckboxForm
-              form={form}
-              name="isNews"
-              label='New'
+            <Ratings
+              rating={form.getValues("star")}
+              variant="yellow"
+              onRatingChange={(value) => form.setValue("star", value)}
             />
-            <CheckboxForm
-              form={form}
-              name="recommend"
-              label='Recommend'
-            />
+            <CheckboxForm form={form} name="isNews" label="New" />
+            <CheckboxForm form={form} name="recommend" label="Recommend" />
             <DialogFooter className="mt-3">
-              <Button type="submit" loading={isPending}>{formValue?.id ? 'Update' : 'Create'}</Button>
+              <Button type="submit" loading={isPending}>
+                {formValue?.id ? "Update" : "Create"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
       </DialogContent>
-    </Dialog >
-  )
-}
-
+    </Dialog>
+  );
+};

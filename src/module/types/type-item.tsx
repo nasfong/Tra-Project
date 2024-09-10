@@ -17,7 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { forwardRef, memo, useCallback, useEffect, useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
-import { useDeleteType, useUpdateType } from "@/hook/types";
+import { useDeleteType, useUpdateTypeOrder } from "@/hook/types";
 import { TypesAction } from "./types-action";
 
 const TypesItem = memo(
@@ -31,19 +31,22 @@ const TypesItem = memo(
     const [data, setData] = useState(items);
     const [activeId, setActiveId] = useState<string | null>(null);
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
-    const { mutateAsync: mutateAsyncDelete, isPending: isPendingDelete } = useDeleteType();
 
-    const { mutate: updateMutation } = useUpdateType();
+    // hook
+    const { mutateAsync: mutateAsyncDelete, isPending: isPendingDelete } =
+      useDeleteType();
+    const { mutate: updateMutation } = useUpdateTypeOrder();
 
+    useEffect(() => {
+      setData(items);
+    }, [items]);
+
+    // delete
     const onDelete = (id: string) => {
       return mutateAsyncDelete(id)
         .then(() => true)
         .catch(() => false);
     };
-
-    useEffect(() => {
-      setData(items);
-    }, [items]);
 
     const handleDragStart = useCallback((event: DragStartEvent) => {
       setActiveId(event.active.id.toString());
@@ -156,7 +159,7 @@ const TypesItem = memo(
           items={data.map((item) => item.id)}
           strategy={rectSortingStrategy}
         >
-          <div className='grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2'>
+          <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
             {data.map((item) => (
               <TypesAction
                 key={item.id}

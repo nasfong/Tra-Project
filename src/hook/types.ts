@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 
-export const useQueryTypes = () => {
+export const useQueryTypes = ({ fetch = true } = {}) => {
   return useQuery<Types[]>({
     queryKey: ["types"], // A unique key for the query
     queryFn: async () => {
@@ -10,6 +10,7 @@ export const useQueryTypes = () => {
       const response = await axios.get("/type");
       return response.data;
     },
+    enabled: fetch,
   });
 };
 
@@ -30,7 +31,7 @@ export const useSubmitType = (id?: string) => {
   });
 };
 
-export const useUpdateType = () => {
+export const useUpdateTypeOrder = () => {
   // const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: any) => axios.put(`/type-order`, data),
