@@ -1,8 +1,7 @@
-'use client'
-import React, { useState, useEffect } from "react"
-import { Star } from "lucide-react"
-
-import { cn } from "@/lib/utils"
+import React, { useState, useEffect } from "react";
+import { Star } from "lucide-react";
+import { useController, useFormContext } from "react-hook-form";
+import { cn } from "@/lib/utils";
 
 const ratingVariants = {
   default: {
@@ -17,45 +16,44 @@ const ratingVariants = {
     star: "text-yellow-500",
     emptyStar: "text-yellow-200",
   },
-}
+};
 
 interface RatingsProps extends React.HTMLAttributes<HTMLDivElement> {
-  rating: number
-  totalStars?: number
-  size?: number
-  fill?: boolean
-  Icon?: React.ReactElement
-  variant?: keyof typeof ratingVariants
-  onRatingChange?: (rating: number) => void
-  readOnly?: boolean
+  name: string; // Add name prop for form control
+  totalStars?: number;
+  size?: number;
+  fill?: boolean;
+  Icon?: React.ReactElement;
+  variant?: keyof typeof ratingVariants;
+  readOnly?: boolean;
 }
 
 const Ratings = ({
-  rating,
+  name,
   totalStars = 5,
   size = 20,
   fill = true,
   Icon = <Star />,
   variant = "default",
-  onRatingChange,
   readOnly = false,
   ...props
 }: RatingsProps) => {
-  const [rate, setRate] = useState(rating)
+  const { control } = useFormContext(); // Access form control from context
+  const { field } = useController({ name, control }); // Use useController for dynamic form control
+
+  const [rate, setRate] = useState(field.value);
 
   useEffect(() => {
-    setRate(rating)
-  }, [rating])
+    setRate(field.value);
+  }, [field.value]);
 
   const handleStarClick = (index: number) => {
-    const newRating = index + 1
-    setRate(newRating)
-    if (onRatingChange) {
-      onRatingChange(newRating)
-    }
-  }
+    const newRating = index + 1;
+    setRate(newRating);
+    field.onChange(newRating); // Use field.onChange to update the form value
+  };
 
-  const fullStars = Math.floor(rate)
+  const fullStars = Math.floor(rate);
   const partialStar =
     rate % 1 > 0 ? (
       <PartialStar
@@ -64,7 +62,7 @@ const Ratings = ({
         className={cn(ratingVariants[variant].star)}
         Icon={Icon}
       />
-    ) : null
+    ) : null;
 
   return (
     <div className={cn("flex items-center gap-2")} {...props}>
@@ -85,18 +83,20 @@ const Ratings = ({
           key: i + fullStars,
           size,
           className: cn(ratingVariants[variant].emptyStar),
-          onClick: readOnly ? undefined : () => handleStarClick(i + fullStars), // Disable click if readOnly
+          onClick: readOnly
+            ? undefined
+            : () => handleStarClick(i + fullStars), // Disable click if readOnly
         })
       )}
     </div>
-  )
-}
+  );
+};
 
 interface PartialStarProps {
-  fillPercentage: number
-  size: number
-  className?: string
-  Icon: React.ReactElement
+  fillPercentage: number;
+  size: number;
+  className?: string;
+  Icon: React.ReactElement;
 }
 
 const PartialStar = ({
@@ -125,7 +125,7 @@ const PartialStar = ({
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export { Ratings }
+export { Ratings };

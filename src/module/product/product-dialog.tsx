@@ -37,9 +37,7 @@ export const ProductDialog = ({
   formValue,
   setFormValue,
 }: Props) => {
-  const { data: typeData, isLoading: typeLoading } = useQueryTypes({
-    fetch: open,
-  });
+  const { data: typeData, isLoading: typeLoading } = useQueryTypes({ fetch: open });
   const { mutateAsync, isPending } = useSubmitProduct(formValue?.id);
 
   const formSchema = z.object({
@@ -136,7 +134,7 @@ export const ProductDialog = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-2"
           >
-            <Upload form={form} name="file" />
+            <Upload name="file" image="image" />
             <div className="grid grid-cols-2 gap-3">
               <InputForm name="name" label={"Name"} placeholder={"Name"} />
               <InputForm name="price" label="Price" placeholder="Price" />
@@ -162,13 +160,9 @@ export const ProductDialog = ({
               label="Description"
               placeholder="Description"
             />
-            <Ratings
-              rating={form.getValues("star")}
-              variant="yellow"
-              onRatingChange={(value) => form.setValue("star", value)}
-            />
-            <CheckboxForm form={form} name="isNews" label="New" />
-            <CheckboxForm form={form} name="recommend" label="Recommend" />
+            <Ratings name="star" variant="yellow" />
+            <CheckboxForm name="isNews" label="New" />
+            <CheckboxForm name="recommend" label="Recommend" />
             <DialogFooter className="mt-3">
               <Button type="submit" loading={isPending}>
                 {formValue?.id ? "Update" : "Create"}

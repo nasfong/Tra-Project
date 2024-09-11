@@ -1,21 +1,23 @@
-'use client'
 import React, { useState, ChangeEvent, DragEvent } from 'react';
 import { InputFileForm } from './input-file-form';
 import { toast } from 'sonner';
 import { Image } from '../custom/image';
+import { useController, useFormContext } from 'react-hook-form';
 
 
 interface UploadProps {
-  form: any;
   name: string;
+  image: string;
 }
 
-const Upload: React.FC<UploadProps> = ({ form, name }) => {
-  const [files, setFiles] = useState<File[]>([]);
+const Upload: React.FC<UploadProps> = ({ name, image }) => {
+  const { control } = useFormContext();
+  const { field } = useController<{ [key: string]: File[] }>({ name, control });
+  const { field: imageField } = useController<{ [key: string]: string[] }>({ name: image, control });
+
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
   const [hoveringIndex, setHoveringIndex] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [images, setImages] = useState<string[]>(form.getValues('image'))
 
   const humanFileSize = (size: number): string => {
     const i = Math.floor(Math.log(size) / Math.log(1024));
@@ -27,28 +29,25 @@ const Upload: React.FC<UploadProps> = ({ form, name }) => {
   };
 
   const removeFile = (index: number) => {
-    const newFiles = [...files];
+    const newFiles = [...field.value];
     newFiles.splice(index, 1);
-    setFiles(newFiles);
-    form.setValue(name, newFiles);
+    field.onChange(newFiles);
   };
   const removePreviewImage = (index: number) => {
-    const updatedImages = [...images];
+    const updatedImages = [...imageField.value];
     updatedImages.splice(index, 1);
-
-    setImages(updatedImages);
-    form.setValue('image', updatedImages);
+    imageField.onChange(updatedImages);
   }
 
   const handleDropImage = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (draggingIndex === null || hoveringIndex === null) return;
 
-    const newFiles = [...files];
+    const newFiles = [...field.value];
     const [movedFile] = newFiles.splice(draggingIndex, 1);
     newFiles.splice(hoveringIndex, 0, movedFile);
-    setFiles(newFiles);
-    form.setValue(name, newFiles)
+    field.onChange(newFiles);
+
     setDraggingIndex(null);
     setHoveringIndex(null);
   };
@@ -57,12 +56,11 @@ const Upload: React.FC<UploadProps> = ({ form, name }) => {
     e.preventDefault();
     if (draggingIndex === null || hoveringIndex === null) return;
 
-    const updatedList = [...images];
+    const updatedList = [...imageField.value];
     const [movedImage] = updatedList.splice(draggingIndex, 1);
     updatedList.splice(hoveringIndex, 0, movedImage);
 
-    setImages(updatedList);
-    form.setValue('image', updatedList);
+    imageField.onChange(updatedList);
     setDraggingIndex(null);
     setHoveringIndex(null);
   };
@@ -99,11 +97,7 @@ const Upload: React.FC<UploadProps> = ({ form, name }) => {
     }
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      setFiles(prevFiles => {
-        const updatedFiles = [...prevFiles, ...newFiles];
-        form.setValue(name, updatedFiles);
-        return updatedFiles;
-      });
+      field.onChange(newFiles);
     }
   };
 
@@ -114,7 +108,6 @@ const Upload: React.FC<UploadProps> = ({ form, name }) => {
           className="relative flex flex-col text-gray-400 border border-gray-200 border-dashed rounded cursor-pointer"
         >
           <InputFileForm
-            form={form}
             name={name}
             multiple={true}
             onChanges={addFiles}
@@ -128,7 +121,7 @@ const Upload: React.FC<UploadProps> = ({ form, name }) => {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4 mt-4 md:grid-cols-6">
-          {images?.map((image, index) => (
+          {imageField.value?.map((image, index) => (
             <div
               key={index}
               className={`relative flex flex-col items-center overflow-hidden text-center bg-gray-100 border rounded cursor-move select-none transition-transform duration-300 ease-in-out transform ${isDragging ? 'scale-105' : 'scale-100'
@@ -159,7 +152,7 @@ const Upload: React.FC<UploadProps> = ({ form, name }) => {
                 src={image} height={500} width={500} className="absolute inset-0 z-0 object-contain border-4 border-transparent" alt={'review' + index} />
             </div>
           ))}
-          {files.map((file, index) => (
+          {field.value?.map((file, index) => (
             <div
               key={index}
               className={`relative flex flex-col items-center overflow-hidden text-center bg-gray-100 border rounded cursor-move select-none transition-transform duration-300 ease-in-out transform ${isDragging ? 'scale-105' : 'scale-100'
@@ -185,7 +178,7 @@ const Upload: React.FC<UploadProps> = ({ form, name }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </button>
-              <Image
+              <img
                 src={loadFile(file)}
                 alt={`upload-image-${index}`}
                 height={500} width={500}

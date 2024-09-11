@@ -16,3 +16,14 @@ type Product = {
   recommend: boolean;
   star: number
 }
+
+type Customer = {
+  id: string
+  image: string
+  name: string
+  phone: string
+  product: Product
+  status: 1 | 2 | 3
+  createdAt: string
+  updatedAt: string
+}

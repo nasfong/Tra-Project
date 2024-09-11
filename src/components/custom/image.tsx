@@ -1,5 +1,5 @@
 import { Constant } from '@/lib/constant';
-import React from 'react';
+import defaultImage from '@/assets/image/default.png'
 
 interface ImageProps {
   src: string;
@@ -10,15 +10,19 @@ interface ImageProps {
   className?: string;
 }
 
-export const Image: React.FC<ImageProps> = ({ src, alt, sizes, width, height, className }) => {
+export const Image = ({ src, alt, sizes, width, height, className }: ImageProps) => {
+  const srcStr = src ? Constant.imageUrl + src : defaultImage
   return (
     <img
-      src={Constant.imageUrl + src}
+      src={srcStr}
       alt={alt}
       sizes={sizes}
       width={width}
       height={height}
       className={className}
+      onError={(e) => {
+        (e.target as any).src = defaultImage;
+      }}
     />
   );
 };

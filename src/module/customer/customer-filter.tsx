@@ -7,9 +7,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Constant } from "@/lib/constant"
 import { ListFilter } from "lucide-react"
+import { useLocation, useNavigate } from "react-router-dom"
 
 export const CustomerFilter = () => {
+  const navigate = useNavigate()
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const filter = queryParams.get('filter') || '';
+
+  const onFilter = (status: string) => {
+    if (status === '') {
+      queryParams.delete('filter');
+      navigate({ search: queryParams.toString() }, { replace: true });
+      return
+    }
+    navigate(`?filter=${status}`, { replace: true });
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -23,13 +38,14 @@ export const CustomerFilter = () => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Filter by</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuCheckboxItem checked>
-          Active
+        <DropdownMenuCheckboxItem onClick={() => onFilter('')} checked={filter === ""}>
+          All
         </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem>
-          Archived
-        </DropdownMenuCheckboxItem>
+        {Object.keys(Constant.status).map(status => (
+          <DropdownMenuCheckboxItem key={status} onClick={() => onFilter(status)} checked={filter === status}>
+            {status}
+          </DropdownMenuCheckboxItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   )

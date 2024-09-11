@@ -2,13 +2,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 
-export const useQueryProducts = () => {
+export const useQueryProducts = ({ fetch = true } = {}) => {
   return useQuery<Product[]>({
     queryKey: ["products"],
     queryFn: async () => {
       const response = await axios.get("/product");
       return response.data;
     },
+    enabled: fetch,
   });
 };
 

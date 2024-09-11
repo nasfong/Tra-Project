@@ -1,4 +1,5 @@
-import { forwardRef } from "react";
+import React, { forwardRef } from 'react';
+import { useController, useFormContext } from 'react-hook-form';
 import {
   FormControl,
   FormDescription,
@@ -6,16 +7,41 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/inputs";
+} from '../ui/form';
+import { Input, InputProps } from '../ui/inputs';
 
-export const InputFileForm = forwardRef<HTMLDivElement, any>(
-  ({ form, name, label, description, onChanges, ...props }, ref) => {
+type InputFileFormProps = {
+  name: string;
+  label?: string;
+  description?: string;
+  onChanges?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+} & InputProps
+
+export const InputFileForm = forwardRef<HTMLInputElement, InputFileFormProps>(
+  ({ name, label, description, onChanges, ...props }, ref) => {
+    const { control } = useFormContext(); // Access form control from context
+    const {
+      field: { value, onChange, ...fieldProps },
+      fieldState,
+    } = useController({ name, control });
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(event.target.files || []);
+      const preData = Array.isArray(value) ? value : [];
+      const updatedFiles = [...preData, ...files];
+      if (onChanges) {
+        onChanges(event);
+        return
+      }
+      onChange(updatedFiles);
+
+    };
+
     return (
       <FormField
-        control={form.control}
+        control={control}
         name={name}
-        render={({ field: { value, onChange, ...fieldProps } }) => (
+        render={() => (
           <FormItem>
             <FormLabel>{label}</FormLabel>
             <FormControl>
@@ -26,22 +52,16 @@ export const InputFileForm = forwardRef<HTMLDivElement, any>(
                 placeholder="Picture"
                 type="file"
                 accept=".png, .jpg, .jpeg"
-                onChange={
-                  onChanges
-                    ? onChanges
-                    : (event) => {
-                        const files = Array.from(event.target.files || []);
-                        const preData = Array.isArray(value) ? value : [];
-                        onChange([...preData, ...files]);
-                      }
-                }
+                onChange={handleChange}
               />
             </FormControl>
             {!!description && <FormDescription>{description}</FormDescription>}
-            <FormMessage />
+            <FormMessage>{fieldState.error?.message}</FormMessage>
           </FormItem>
         )}
       />
     );
   }
 );
+
+InputFileForm.displayName = 'InputFileForm'; // Set display name for better debugging

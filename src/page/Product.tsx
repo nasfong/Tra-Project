@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useQueryProducts } from "@/hook/product";
+import { useDeleteProduct, useQueryProducts } from "@/hook/product";
 import { useState } from "react";
 import { ProductDialog } from '@/module/product/product-dialog';
 import { Button } from "@/components/ui/button";
@@ -19,11 +19,18 @@ const Product = () => {
 
   // hook
   const { data, isLoading } = useQueryProducts()
+  const { mutateAsync: deleteMutateAsync, isPending: deleteLoading } = useDeleteProduct()
 
-  // const handleEdit = (value: any) => {
-  //   setFormValue(value);
-  //   setOpen(true);
-  // };
+  const onEdit = (value: any) => {
+    setFormValue(value);
+    setOpen(true);
+  };
+
+  const onDelete = (id: string) => {
+    return deleteMutateAsync(id)
+      .then(() => true)
+      .catch(() => false);
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -53,7 +60,15 @@ const Product = () => {
             {isLoading && Array(3).fill(null).map((_, index) => (
               <Skeleton key={index} className="h-[267px] rounded-xl" />
             ))}
-            {data?.map((item, index) => <ProductItem key={index} item={item} delay={index / 4} />)}
+            {data?.map((item, index) =>
+              <ProductItem
+                key={index}
+                item={item}
+                delay={index / 4}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                deleteLoading={deleteLoading}
+              />)}
           </div>
         </CardContent>
       </Card>

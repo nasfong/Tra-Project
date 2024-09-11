@@ -16,36 +16,36 @@ import { Form } from "@/components/ui/form"
 import { InputForm } from "@/components/form/input-form"
 import { SelectForm } from "@/components/form/select-form"
 import { useEffect } from "react"
-import { TextAreaForm } from "@/components/form/textarea-form"
+import { useQueryProducts } from "@/hook/product"
+import { useSubmitCustomer } from "@/hook/customer"
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "name must be at least 2 characters long."
-  }),
-  type: z.string().min(2, {
-    message: "name must be at least 2 characters long."
-  }),
+  file: z.any().optional(),
+  image: z.any().optional(),
+  name: z.string().nonempty("required"),
+  phone: z.string().nonempty("required"),
+  product: z.string().nonempty("required"),
 })
 
 type Props = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  formValue: any
-  setFormValue: any
+  formValue: Customer | null
+  setFormValue: React.Dispatch<React.SetStateAction<Customer | null>>
 }
 
 export const CustomerFormDialog = ({ open, setOpen, formValue, setFormValue }: Props) => {
+  // hook
+  const { data: productData, isLoading: productLoading } = useQueryProducts({ fetch: open });
+  const { mutateAsync, isPending } = useSubmitCustomer(formValue?.id);
+
 
   const defaultValues = {
+    file: null,
+    image: "",
     name: "",
     phone: "",
     product: "",
-    level: "",
-    job: "",
-    province: "",
-    district: "",
-    commune: "",
-    other: "",
   }
 
   const form = useForm({
@@ -54,25 +54,41 @@ export const CustomerFormDialog = ({ open, setOpen, formValue, setFormValue }: P
   })
 
   useEffect(() => {
-    if (formValue) form.reset(formValue)
-  }, [form, formValue])
-
-  const onOpenChange = (isOpen: boolean) => {
-    setOpen(isOpen)
-    // close with clear value
-    if (!isOpen) {
-      form.reset()
-      setFormValue(defaultValues)
+    if (formValue) {
+      form.reset({
+        image: formValue.image,
+        name: formValue.name,
+        phone: formValue.phone,
+        product: formValue.product.id,
+      });
     }
-  }
+  }, [form, formValue]);
 
-  const onSubmit = () => {
+  const onChangeModal = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen) {
+      setOpen(false);
+      form.reset(defaultValues);
+      setFormValue(null);
+    }
+  };
 
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const formData = new FormData();
+    formData.append("file", data.file);
+    formData.append("image", data.image);
+    formData.append("name", data.name);
+    formData.append("phone", data.phone);
+    formData.append("product", data.product);
+
+    mutateAsync(formData).finally(() => {
+      onChangeModal(false);
+    });
   }
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onChangeModal}>
       <DialogTrigger asChild>
-        <Button size="sm" className="h-8 gap-1" onClick={() => onOpenChange(true)}>
+        <Button size="sm" className="h-8 gap-1" onClick={() => onChangeModal(true)}>
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
             Add Customer
@@ -81,79 +97,39 @@ export const CustomerFormDialog = ({ open, setOpen, formValue, setFormValue }: P
       </DialogTrigger>
       <DialogContent className="min-w-[80%]">
         <DialogHeader>
-          <DialogTitle>{!formValue?.id ? 'Create' : 'Edit'} customer</DialogTitle>
+          <DialogTitle>
+            {!formValue?.id ? "Create Customer" : "Edit Customer"}
+          </DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <InputForm
-              name="name"
-              placeholder="Name"
-              label="Name"
-            />
             <div className="grid grid-cols-2 gap-3">
+              <InputForm
+                name="name"
+                placeholder="Name"
+                label="Name"
+              />
               <InputForm
                 name="phone"
                 placeholder="Phone"
                 label="Phone"
               />
-              <InputForm
-                name="level"
-                placeholder="Level"
-                label="Level"
-              />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <SelectForm
-                form={form}
-                name="product"
-                placeholder="Select a product"
-                label="Product"
-                options={[
-                  { id: "1", name: "John Doe" },
-                  { id: "2", name: "Jane Doe" },
-                  { id: "3", name: "Michael Doe" },
-                ]}
-                loading={true}
-              />
-              {/* <InputForm
-                form={form}
-                name="job"
-                placeholder="Job"
-                label="Job"
-              /> */}
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              {/* <InputForm
-                form={form}
-                name="province"
-                placeholder="Province"
-                label="Province"
-              /> */}
-              {/* <InputForm
-                form={form}
-                name="district"
-                placeholder="District"
-                label="District"
-              /> */}
-              <InputForm
-                name="commune"
-                placeholder="Commune"
-                label="Commune"
-              />
-            </div>
-            <TextAreaForm
-              form={form}
-              type="textarea"
-              name="other"
-              placeholder="Other"
-              label="Other"
+            <SelectForm
+              name="product"
+              placeholder="Select a product"
+              label="Product"
+              options={productData}
+              loading={productLoading}
             />
 
             <DialogFooter className="mt-3">
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" loading={isPending}>
+                {formValue?.id ? "Update" : "Create"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

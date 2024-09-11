@@ -37,10 +37,9 @@ export const DeleteDialog = forwardRef<HTMLButtonElement, DeleteButtonProps>(
 
     return (
       <>
-        {clonedChildren}
         <AlertDialog open={open} onOpenChange={onChangeModal} >
           <AlertDialogTrigger asChild>
-
+            {clonedChildren}
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
