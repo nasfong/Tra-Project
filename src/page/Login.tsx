@@ -5,7 +5,7 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
-import { InputForm } from "@/components/form/InputForm"
+import { InputForm } from "@/components/form/input-form"
 import { useMutationLogin } from "@/hook/login"
 import { useAuth } from "@/context/useAuth"
 import { useNavigate } from 'react-router-dom';

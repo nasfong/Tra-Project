@@ -9,6 +9,7 @@ import suzuki from '@/assets/image/suzuki.png'
 import logo_suzuki from '@/assets/image/logo-suzuki.png'
 import yamaha from '@/assets/image/yamaha.png'
 import logo_yamaha from '@/assets/image/logo-yamaha.png'
+// import { useUpdateStatusCustomer } from '@/hook/customer';
 
 const motors = [
   {
@@ -58,6 +59,10 @@ const ComponentToPrint = memo(() => (
 
 const Invoice = () => {
   const componentRef = useRef<HTMLDivElement>(null);
+
+  // hook
+  // const { mutate } = useUpdateStatusCustomer()
+
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
