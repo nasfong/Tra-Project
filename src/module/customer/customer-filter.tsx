@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -6,25 +6,25 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Constant } from "@/lib/constant"
-import { ListFilter } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
+} from "@/components/ui/dropdown-menu";
+import { Constant } from "@/lib/constant";
+import { ListFilter } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 export const CustomerFilter = () => {
-  const navigate = useNavigate()
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const filter = queryParams.get('filter') || '';
+  const [searchParams, setSearchParams] = useSearchParams();
+  const status = searchParams.get('status') || '';
 
-  const onFilter = (status: string) => {
-    if (status === '') {
-      queryParams.delete('filter');
-      navigate({ search: queryParams.toString() }, { replace: true });
-      return
+  const onFilter = (s: string) => {
+    searchParams.delete('page')
+    if (s === "") {
+      searchParams.delete('status');
+    } else {
+      searchParams.set('status', s);
     }
-    navigate(`?filter=${status}`, { replace: true });
-  }
+    setSearchParams(searchParams, { replace: true });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -38,16 +38,19 @@ export const CustomerFilter = () => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Filter by</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuCheckboxItem onClick={() => onFilter('')} checked={filter === ""}>
+        <DropdownMenuCheckboxItem onClick={() => onFilter("")} checked={status === ""}>
           All
         </DropdownMenuCheckboxItem>
-        {Object.keys(Constant.status).map(status => (
-          <DropdownMenuCheckboxItem key={status} onClick={() => onFilter(status)} checked={filter === status}>
-            {status}
+        {Object.entries(Constant.status).map(([key, value]) => (
+          <DropdownMenuCheckboxItem
+            key={key}
+            onClick={() => onFilter(value.toString())}
+            checked={status === value.toString()}
+          >
+            {key}
           </DropdownMenuCheckboxItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
-
+  );
+};

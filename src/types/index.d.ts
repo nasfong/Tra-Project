@@ -27,3 +27,13 @@ type Customer = {
   createdAt: string
   updatedAt: string
 }
+
+type CustomerList = {
+  data: Customer[]
+  pagination: {
+    total: number
+    totalPages: number
+    currentPage: number
+    limit: number
+  }
+}

@@ -22,8 +22,14 @@ const Customer = () => {
   const [open, setOpen] = useState(false);
   const [formValue, setFormValue] = useState<Customer | null>(null);
 
+  // params
+  const queryParams = new URLSearchParams(location.search);
+  const page = parseInt(queryParams.get('page') || '1')
+  const status = parseInt(queryParams.get('status') || "") || undefined;
+
+
   // hook
-  const { data } = useQueryCustomers()
+  const { data } = useQueryCustomers({ limit: 2, page, status: status })
   const { mutateAsync: statusMutateAsync, isPending: loadingStatus } = useUpdateStatusCustomer()
 
   // edit
@@ -75,7 +81,7 @@ const Customer = () => {
         </CardHeader>
         <CardContent>
           <CustomerItem
-            data={data}
+            data={data?.data}
             onEdit={onEdit}
             onApprove={onApprove}
             redirectToInvoice={redirectToInvoice}
@@ -84,10 +90,7 @@ const Customer = () => {
           />
         </CardContent>
         <CardFooter className="flex justify-between">
-          <div className="text-xs text-muted-foreground sr-only sm:not-sr-only">
-            Showing <strong>1-10</strong> of <strong>32</strong> products
-          </div>
-          <PaginationDemo />
+          <PaginationDemo {...data?.pagination} />
         </CardFooter>
       </Card>
     </div >

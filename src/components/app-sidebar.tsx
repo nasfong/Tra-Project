@@ -17,10 +17,12 @@ import {
   Map,
   PieChart,
   Rabbit,
+  ScanEye,
   Send,
   ShieldCheck,
   ShoppingCart,
   SquareUserRound,
+  UserRoundCheck,
   // Settings2,
   // SquareTerminal,
   // Star,
@@ -293,7 +295,17 @@ const setting = [
   {
     title: "Administrator",
     url: "/administrator",
+    icon: UserRoundCheck,
+  },
+  {
+    title: "Permission",
+    url: "/permission",
     icon: ShieldCheck,
+  },
+  {
+    title: "Role",
+    url: "/role",
+    icon: ScanEye,
   },
   {
     title: "Loan Industry",

@@ -2,11 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 
-export const useQueryCustomers = () => {
-  return useQuery<Customer[]>({
-    queryKey: ["customers"],
+export const useQueryCustomers = ({ limit, page, status }: { limit?: number, page?: number, status?: number } = {}) => {
+  return useQuery<CustomerList>({
+    queryKey: ["customers", limit, page, status],
     queryFn: async () => {
-      const response = await axios.get("/customer");
+      const response = await axios.get("/customer", { params: { limit, page, status } });
       return response.data;
     },
   });
