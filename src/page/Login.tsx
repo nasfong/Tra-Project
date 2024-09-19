@@ -1,58 +1,44 @@
-import { Button } from "@/components/ui/button"
-import boy_svg from "@/assets/svg/boy.svg"
-import { Form } from "@/components/ui/form"
-import { z } from "zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "sonner"
-import { InputForm } from "@/components/form/input-form"
-import { useMutationLogin } from "@/hook/login"
-import { useAuth } from "@/context/useAuth"
-import { useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import boy_svg from "@/assets/svg/boy.svg";
+import { Form } from "@/components/ui/form";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InputForm } from "@/components/form/input-form";
+import { useMutationLogin } from "@/hook/login";
+import { useAuth } from "@/context/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
-  username: z.string().min(1, { message: 'username is required!' }),
+  username: z.string().min(1, { message: "username is required!" }),
   password: z.string().min(5, {
-    message: "password must be at least 5 characters long."
+    message: "password must be at least 5 characters long.",
   }),
-})
+});
 
 const Login = () => {
-
-  const navigate = useNavigate()
-  const { dispatch } = useAuth()
-  const { mutate, isPending: loginLoading } = useMutationLogin()
+  const navigate = useNavigate();
+  const { dispatch } = useAuth();
+  const { mutate, isPending: loginLoading } = useMutationLogin();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
-      password: ''
-    }
-  })
+      username: "",
+      password: "",
+    },
+  });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     mutate(data, {
-      onSuccess: (response) => {
-        dispatch({ type: 'LOGIN', payload: response.data.token })
-        navigate('/')
-        toast('Event has been created', {
-          description: JSON.stringify(data, null, 2),
-          action: {
-            label: 'Undo',
-            onClick: () => console.log('Undo')
-          }
-        });
+      onSuccess: (token) => {
+        navigate("/");
+        dispatch({ type: "LOGIN", payload: token });
       },
-      onError: (error) => {
-        console.error('Error:', error);
-        toast.error('Failed to create event');
-      }
     });
-  }
+  };
 
   return (
-
     <div className="lg:grid lg:grid-cols-2 h-[100vh]">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
@@ -119,8 +105,7 @@ const Login = () => {
         />
       </div>
     </div>
+  );
+};
 
-  )
-}
-
-export default Login
+export default Login;

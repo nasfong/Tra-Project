@@ -1,4 +1,3 @@
-import { Toaster } from "sonner";
 import {
   SidebarLayout,
   SidebarTrigger,
@@ -18,7 +17,6 @@ export const Layout = () => {
           <Outlet />
         </div>
       </main>
-      <Toaster />
     </SidebarLayout>
   );
 };

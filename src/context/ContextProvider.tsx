@@ -1,30 +1,29 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer } from "react";
+import { Toaster } from "sonner";
 
 type AuthState = {
   isAuthenticated: boolean;
   token: string | null;
 };
 
-type AuthAction =
-  | { type: 'LOGIN'; payload: string }
-  | { type: 'LOGOUT' };
+type AuthAction = { type: "LOGIN"; payload: string } | { type: "LOGOUT" };
 
 const initialState: AuthState = {
-  isAuthenticated: !!localStorage.getItem('token'),
-  token: localStorage.getItem('token'),
+  isAuthenticated: !!localStorage.getItem("token"),
+  token: localStorage.getItem("token"),
 };
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
-    case 'LOGIN':
-      localStorage.setItem('token', action.payload);
+    case "LOGIN":
+      localStorage.setItem("token", action.payload);
       return {
         ...state,
         isAuthenticated: true,
         token: action.payload,
       };
-    case 'LOGOUT':
-      localStorage.removeItem('token');
+    case "LOGOUT":
+      localStorage.removeItem("token");
       return {
         ...state,
         isAuthenticated: false,
@@ -41,14 +40,19 @@ type AuthContextType = {
   dispatch: React.Dispatch<AuthAction>;
 };
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
       {children}
+      <Toaster position="top-right" richColors closeButton />
     </AuthContext.Provider>
   );
 };
