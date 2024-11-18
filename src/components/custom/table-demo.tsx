@@ -199,6 +199,7 @@ export function TableDemo() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
+          name=""
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
@@ -244,9 +245,9 @@ export function TableDemo() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}

@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputForm } from "@/components/form/input-form";
 import { useMutationLogin } from "@/hook/login";
-import { useAuth } from "@/context/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/useStore";
 
 const formSchema = z.object({
   username: z.string().min(1, { message: "username is required!" }),
@@ -18,7 +18,8 @@ const formSchema = z.object({
 
 const Login = () => {
   const navigate = useNavigate();
-  const { dispatch } = useAuth();
+  const { login } = useAuthStore()
+
   const { mutate, isPending: loginLoading } = useMutationLogin();
 
   const form = useForm({
@@ -33,7 +34,7 @@ const Login = () => {
     mutate(data, {
       onSuccess: (token) => {
         navigate("/");
-        dispatch({ type: "LOGIN", payload: token });
+        login(token)
       },
     });
   };
