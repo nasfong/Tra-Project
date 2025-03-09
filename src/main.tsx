@@ -5,6 +5,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import App from "./App.tsx";
 import "./index.css";
+import { scan } from "react-scan"
+
+scan({
+  enabled: true
+})
 
 const queryClient = new QueryClient();
 
