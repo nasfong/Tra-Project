@@ -8,7 +8,7 @@ import "./index.css";
 import { scan } from "react-scan"
 
 scan({
-  enabled: true
+  enabled: false
 })
 
 const queryClient = new QueryClient();

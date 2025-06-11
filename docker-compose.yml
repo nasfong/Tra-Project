@@ -1,0 +1,14 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tra-project
+    volumes:
+      - .:/app          # Mount the local directory
+      - /app/node_modules  # Avoid overwriting node_modules in the container
+    ports:
+      - "5173:5173"      # Expose Vite's default port
+    environment:
+      - NODE_ENV=development

@@ -19,7 +19,7 @@ type SidebarContext = {
 const SidebarContext = React.createContext<SidebarContext>({
   state: "open",
   open: true,
-  onOpenChange: () => {},
+  onOpenChange: () => { },
 });
 
 function useSidebar() {
@@ -32,13 +32,22 @@ const SidebarLayout = React.forwardRef<
     defaultOpen?: boolean;
   }
 >(({ defaultOpen, className, ...props }, ref) => {
-  const [open, setOpen] = React.useState(defaultOpen ?? true);
+  const [open, setOpen] = React.useState(() => {
+    if (typeof document !== "undefined") {
+      const cookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith(SIDEBAR_STATE_COOKIE))
+        ?.split("=")[1];
+
+      return cookie === "true";
+    }
+    return defaultOpen ?? true;
+  });
 
   const onOpenChange = React.useCallback((open: boolean) => {
     setOpen(open);
-    document.cookie = `${SIDEBAR_STATE_COOKIE}=${open}; path=/; max-age=${
-      60 * 60 * 24 * 7
-    }`;
+    document.cookie = `${SIDEBAR_STATE_COOKIE}=${open}; path=/; max-age=${60 * 60 * 24 * 7
+      }; samesite=lax`;
   }, []);
 
   const state = open ? "open" : "closed";

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  name: string;
+  name?: any;
   icon?: React.ReactNode;
 }
 
