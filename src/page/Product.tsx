@@ -21,7 +21,7 @@ const Product = () => {
   const { data, isLoading } = useQueryProducts()
   const { mutateAsync: deleteMutateAsync, isPending: deleteLoading } = useDeleteProduct()
 
-  const onEdit = (value: any) => {
+  const onEdit = (value: Product) => {
     setFormValue(value);
     setOpen(true);
   };

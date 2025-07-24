@@ -10,7 +10,7 @@ type Product = {
   name: string
   price: string
   description: string
-  type: Type
+  type: Types
   isNews: boolean;
   isSold: 1 | 2;
   recommend: boolean;
