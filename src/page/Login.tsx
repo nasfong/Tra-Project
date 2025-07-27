@@ -34,7 +34,7 @@ const Login = () => {
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     mutate(data, {
       onSuccess: (response) => {
-        dispatch({ type: 'LOGIN', payload: response.data.token })
+        dispatch({ type: 'LOGIN', payload: response.data.accessToken })
         navigate('/')
         toast('Event has been created', {
           description: JSON.stringify(data, null, 2),
