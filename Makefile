@@ -1,21 +1,23 @@
 include include.mk
 
-# Build the Docker image
 build:
-	docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
+	docker build -f $(DOCKERFILE_PROD) -t $(IMAGE_NAME):$(TAG) $(DOCKERFILE_PATH)
 
-# Run the container in detached mode
-run:
-	docker run -d -p 3000:80 --name $(CONTAINER_NAME) $(DOCKER_IMAGE):$(DOCKER_TAG)
+# Push the Docker image to Docker Hub
+push:
+	docker push $(IMAGE_NAME):$(TAG)
 
-# Stop and remove the container
-stop:
-	docker stop $(CONTAINER_NAME)
-	docker rm $(CONTAINER_NAME)
+# Pull the Docker image from Docker Hub
+pull:
+	docker pull $(IMAGE_NAME):$(TAG)
 
-# Clean up Docker images
+# Build and push the Docker image in one step
+build-and-push: build push
+
+# Pull and run the Docker image
+pull-and-run: pull
+	docker run -p 5000:5000 --rm $(IMAGE_NAME):$(TAG)
+
+# Clean up unused Docker images and containers
 clean:
-	docker rmi $(DOCKER_IMAGE):$(DOCKER_TAG)
-
-# Rebuild and rerun the container
-rebuild: stop build run
+	docker system prune -f

@@ -1,4 +1,5 @@
-# Common variables
-DOCKER_IMAGE=my-react-app
-DOCKER_TAG=latest
-CONTAINER_NAME=my-react-container
+# Define variables
+IMAGE_NAME = nasfong/dashboard
+TAG = latest
+DOCKERFILE_PATH = .
+DOCKERFILE_PROD = Dockerfile.production  
