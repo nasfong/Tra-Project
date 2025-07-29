@@ -1,23 +1,28 @@
-# Use lightweight Node.js image
-FROM node:20-alpine
+# Step 1: Build the React app
+FROM node:18 as build
 
-# Set working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies first
+# Copy the package.json and install dependencies
 COPY package*.json ./
+RUN npm install
 
-# Install dependencies (use --legacy-peer-deps in case of npm issues)
-RUN npm install 
-
-# Copy the rest of the project files
+# Copy the rest of the app and build the project
 COPY . .
+RUN npm run build
 
-# Expose Vite default development port
-EXPOSE 5173
+# Step 2: Serve the app with NGINX
+FROM nginx:alpine
 
-# Set the environment to development
-ENV NODE_ENV=development
+# Copy the built React files from the previous stage
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Start the Vite development server
-CMD ["npm", "run", "dev", "--", "--host"]
+# Copy a default nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Start NGINX
+CMD ["nginx", "-g", "daemon off;"]

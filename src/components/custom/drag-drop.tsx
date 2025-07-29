@@ -21,7 +21,7 @@ type DragDropProps<T> = {
   data: T[];
   className?: string;
   children: (item: T) => ReactNode;
-  handleDragEnd?: (event: any) => void;
+  handleDragEnd: (event: any) => void;
   onEdit: (item: T) => void;
   onDelete: (id: string) => void;
   loading?: boolean;
@@ -77,7 +77,7 @@ export const DragDrop = <T extends { id: string }>({
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (handleDragEnd) {
+    if (active.id !== over?.id) {
       const oldIndex = data.findIndex((item) => item.id === active.id);
       const newIndex = data.findIndex((item) => item.id === over?.id);
       const updatedItems = arrayMove(data, oldIndex, newIndex);
