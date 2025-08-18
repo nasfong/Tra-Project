@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App.tsx";
 import "./index.css";
 import { scan } from "react-scan";
+import { useAuthStore } from "./store/useStore.ts";
 
 scan({
   enabled: false
@@ -19,13 +20,10 @@ axios.defaults.withCredentials = true; // ✅ send cookies (important for sessio
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Accept"] = "application/json";
 
-// Optional: keep token in localStorage if using JWT too
-const getToken = () => localStorage.getItem("token");
-
 // Attach Authorization header if token exists (used for optional JWT API)
 axios.interceptors.request.use(
   (config) => {
-    const token = getToken();
+    const token = useAuthStore.getState().token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -35,19 +33,22 @@ axios.interceptors.request.use(
 );
 
 // Handle token expiry
-axios.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (
-      error.response?.status === 401 &&
-      error.response.data?.message?.toLowerCase().includes("token expired")
-    ) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    }
-    return Promise.reject(error);
-  }
-);
+// axios.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (
+//       error.response?.status === 403 &&
+//       error.response.data?.message?.toLowerCase().includes("invalid token")
+//     ) {
+//       axios.post("/refresh").then((response) => {
+//         console.log("Token refreshed:", response.data.accessToken);
+//         useAuthStore.getState().login(response.data.accessToken);
+//       })
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
 
 // 🔧 BOOTSTRAP
 ReactDOM.createRoot(document.getElementById("root")!).render(
