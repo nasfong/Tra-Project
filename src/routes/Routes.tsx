@@ -14,6 +14,7 @@ import { PrivateRoutes } from "./PrivateRoutes";
 import { AuthProvider } from "@/context/ContextProvider";
 import Types from "@/page/Types";
 import NotFound from "@/module/not-found";
+import Administrator from "@/page/Administrator";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
               { path: "invoice/:cId", element: <Invoice /> },
             ],
           },
+          { path: "administrator", element: <Administrator /> },
         ],
       },
     ],

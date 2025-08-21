@@ -15,7 +15,7 @@ scan({
 const queryClient = new QueryClient();
 
 // 🔧 AXIOS GLOBAL SETUP
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+axios.defaults.baseURL = import.meta.env.VITE_API_URL + "/api";
 axios.defaults.withCredentials = true; // ✅ send cookies (important for sessions)
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Accept"] = "application/json";

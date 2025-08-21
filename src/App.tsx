@@ -3,10 +3,10 @@ import Routes from './routes/Routes'
 import { useAuthStore } from './store/useStore'
 
 function App() {
-  const { refreshAccessToken } = useAuthStore()
-  useEffect(() => {
-    refreshAccessToken()
-  }, [refreshAccessToken])
+  // const { refreshAccessToken } = useAuthStore()
+  // useEffect(() => {
+  //   refreshAccessToken()
+  // }, [refreshAccessToken])
   return (
     <Suspense fallback={<>Loading...</>}>
       <Routes />

@@ -1,4 +1,4 @@
-const imageUrl = import.meta.env.VITE_API_URL + '/image/'
+const imageUrl = import.meta.env.VITE_API_URL + '/api/image/'
 
 const stock = [
   { id: 1, name: "In Stock" },
