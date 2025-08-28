@@ -29,7 +29,7 @@ const Customer = () => {
 
 
   // hook
-  const { data } = useQueryCustomers({ limit: 2, page, status: status })
+  const { data, isLoading } = useQueryCustomers({ limit: 2, page, status: status })
   const { mutateAsync: statusMutateAsync, isPending: loadingStatus } = useUpdateStatusCustomer()
 
   // edit
@@ -82,6 +82,7 @@ const Customer = () => {
         <CardContent>
           <CustomerItem
             data={data?.data}
+            loading={isLoading}
             onEdit={onEdit}
             onApprove={onApprove}
             redirectToInvoice={redirectToInvoice}

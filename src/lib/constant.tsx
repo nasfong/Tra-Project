@@ -1,4 +1,6 @@
-const imageUrl = import.meta.env.VITE_API_URL + '/api/image/'
+const API_URL = window.__ENV__?.VITE_API_URL || "http://localhost:5000";
+
+const imageUrl = API_URL + '/api/image/'
 
 const stock = [
   { id: 1, name: "In Stock" },
@@ -14,4 +16,5 @@ export const Constant = {
   imageUrl,
   stock,
   status,
+  API_URL
 };

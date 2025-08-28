@@ -1,7 +1,10 @@
+import CheckoutButton from '@/components/custom/CheckoutButton';
+import { Constant } from '@/lib/constant';
 import React, { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:5000';
+const SOCKET_URL = Constant.API_URL;
+const USER_ID = '68a94ef12b709d0c5087eca5'; // Replace with logged-in user's ID
 
 function Administrator() {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -15,12 +18,20 @@ function Administrator() {
 
     setSocket(newSocket);
 
-    // 2️⃣ Listen for 'notification' events
-    newSocket.on('notification', (msg: string) => {
-      setNotifications((prev) => [...prev, msg]);
+    // 2️⃣ Register userId for private messages
+    newSocket.emit('identifyUser', USER_ID);
+
+    // 3️⃣ Listen for public notifications
+    newSocket.on('publicNotification', (msg: string) => {
+      setNotifications((prev) => [...prev, `Public: ${msg}`]);
     });
 
-    // 3️⃣ Optional: log connection status
+    // 4️⃣ Listen for private notifications
+    newSocket.on('privateNotification', (msg: string) => {
+      setNotifications((prev) => [...prev, `Private: ${msg}`]);
+    });
+
+    // 5️⃣ Optional: log connection status
     newSocket.on('connect', () => console.log('Connected to Socket.IO'));
     newSocket.on('disconnect', () => console.log('Disconnected'));
 
@@ -29,7 +40,7 @@ function Administrator() {
     };
   }, []);
 
-  // 4️⃣ Optional: send a test message to server
+  // 6️⃣ Optional: send a test message to server
   const sendMessage = () => {
     socket?.emit('clientMessage', 'Hello from React!');
   };
@@ -46,6 +57,7 @@ function Administrator() {
           <li key={idx}>{msg}</li>
         ))}
       </ul>
+      <CheckoutButton />
     </div>
   );
 }

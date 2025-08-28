@@ -7,6 +7,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { scan } from "react-scan";
 import { useAuthStore } from "./store/useStore.ts";
+import { Constant } from './lib/constant';
 
 scan({
   enabled: false
@@ -15,7 +16,7 @@ scan({
 const queryClient = new QueryClient();
 
 // 🔧 AXIOS GLOBAL SETUP
-axios.defaults.baseURL = import.meta.env.VITE_API_URL + "/api";
+axios.defaults.baseURL = Constant.API_URL + '/api';
 axios.defaults.withCredentials = true; // ✅ send cookies (important for sessions)
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Accept"] = "application/json";
@@ -23,7 +24,8 @@ axios.defaults.headers.post["Accept"] = "application/json";
 // Attach Authorization header if token exists (used for optional JWT API)
 axios.interceptors.request.use(
   (config) => {
-    const token = useAuthStore.getState().token;
+    const { token } = useAuthStore.getState()
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

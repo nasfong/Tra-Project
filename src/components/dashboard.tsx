@@ -38,12 +38,12 @@ export const description = "A collection of health charts.";
 
 export function Dashboard() {
 
-  // disable console warning
-  const error = console.error;
-  console.error = (...args: any) => {
-    if (/defaultProps/.test(args[0])) return;
-    error(...args);
-  };
+  // // disable console warning
+  // const error = console.error;
+  // console.error = (...args: any) => {
+  //   if (/defaultProps/.test(args[0])) return;
+  //   error(...args);
+  // };
   return (
     <div className="chart-wrapper mx-auto flex max-w-6xl flex-col flex-wrap items-start justify-center gap-6 p-6 sm:flex-row sm:p-8">
       <div className="grid w-full gap-6 sm:grid-cols-2 lg:max-w-[22rem] lg:grid-cols-1 xl:max-w-[25rem]">
@@ -116,7 +116,7 @@ export function Dashboard() {
                   axisLine={false}
                   tickMargin={4}
                   tickFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                    return new Date(value)?.toLocaleDateString("en-US", {
                       weekday: "short",
                     });
                   }}
@@ -127,7 +127,7 @@ export function Dashboard() {
                     <ChartTooltipContent
                       hideIndicator
                       labelFormatter={(value) => {
-                        return new Date(value).toLocaleDateString("en-US", {
+                        return new Date(value)?.toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "long",
                           year: "numeric",
@@ -255,7 +255,7 @@ export function Dashboard() {
                   axisLine={false}
                   tickMargin={8}
                   tickFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                    return new Date(value)?.toLocaleDateString("en-US", {
                       weekday: "short",
                     });
                   }}
@@ -278,7 +278,7 @@ export function Dashboard() {
                     <ChartTooltipContent
                       indicator="line"
                       labelFormatter={(value) => {
-                        return new Date(value).toLocaleDateString("en-US", {
+                        return new Date(value)?.toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "long",
                           year: "numeric",

@@ -35,6 +35,7 @@ import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 // import { StorageCard } from "@/components/storage-card";
 import { TeamSwitcher } from "@/components/team-switcher";
+import { useAuthStore } from '../store/useStore';
 import {
   Sidebar,
   SidebarContent,
@@ -315,6 +316,13 @@ const setting = [
 ];
 
 export function AppSidebar() {
+  // const userInfo = useAuthStore((state) => state.userInfo);
+  const userInfo = {
+    id: "1",
+    username: "admin",
+    avatar: "/avatars/shadcn.jpg",
+  }
+  console.log("Logged in user:", userInfo);
   return (
     <Sidebar>
       <SidebarHeader>
@@ -351,7 +359,7 @@ export function AppSidebar() {
         </SidebarItem> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userInfo} />
       </SidebarFooter>
     </Sidebar>
   );
