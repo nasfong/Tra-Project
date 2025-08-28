@@ -316,8 +316,13 @@ const setting = [
 ];
 
 export function AppSidebar() {
-  const userInfo = useAuthStore((state) => state.userInfo);
-console.log("Logged in user:", userInfo);
+  // const userInfo = useAuthStore((state) => state.userInfo);
+  const userInfo = {
+    id: "1",
+    username: "admin",
+    avatar: "/avatars/shadcn.jpg",
+  }
+  console.log("Logged in user:", userInfo);
   return (
     <Sidebar>
       <SidebarHeader>
