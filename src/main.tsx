@@ -35,19 +35,22 @@ axios.interceptors.request.use(
 );
 
 // Handle token expiry
-axios.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (
-      error.response?.status === 401 &&
-      error.response.data?.message?.toLowerCase().includes("token expired")
-    ) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    }
-    return Promise.reject(error);
-  }
-);
+// axios.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (
+//       error.response?.status === 403 &&
+//       error.response.data?.message?.toLowerCase().includes("invalid token")
+//     ) {
+//       axios.post("/refresh").then((response) => {
+//         console.log("Token refreshed:", response.data.accessToken);
+//         useAuthStore.getState().login(response.data.accessToken);
+//       })
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
 
 // 🔧 BOOTSTRAP
 ReactDOM.createRoot(document.getElementById("root")!).render(
