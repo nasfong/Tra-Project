@@ -16,13 +16,15 @@ const formSchema = z.object({
   }),
 });
 
+type LoginForm = z.infer<typeof formSchema>; 
+
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuthStore()
 
   const { mutate, isPending: loginLoading } = useMutationLogin();
 
-  const form = useForm({
+  const form = useForm<LoginForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
@@ -30,7 +32,7 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: LoginForm) => {
     mutate(data, {
       onSuccess: (response) => {
         login(response.accessToken)
