@@ -15,6 +15,7 @@ import { AuthProvider } from "@/context/ContextProvider";
 import Types from "@/page/Types";
 import NotFound from "@/module/not-found";
 import Administrator from "@/page/Administrator";
+import Cashier from "@/page/Permission";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
             ],
           },
           { path: "administrator", element: <Administrator /> },
+          { path: "permission", element: <Cashier /> }
         ],
       },
     ],

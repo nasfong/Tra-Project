@@ -1,4 +1,4 @@
-import CheckoutButton from '@/components/custom/CheckoutButton';
+// import CheckoutButton from '@/components/custom/CheckoutButton';
 import { Constant } from '@/lib/constant';
 import React, { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
@@ -57,7 +57,7 @@ function Administrator() {
           <li key={idx}>{msg}</li>
         ))}
       </ul>
-      <CheckoutButton />
+      {/* <CheckoutButton /> */}
     </div>
   );
 }
