@@ -62,7 +62,7 @@ export const useAuthStore = create<AuthState>()(
         if (!profile?.exp) return true; // no token → expired
 
         const now = Math.floor(Date.now() / 1000); // current timestamp in seconds
-        return now >= profile.exp; // true if current time >= exp
+        return now >= profile?.exp; // true if current time >= exp
       }
     }),
     {

@@ -87,7 +87,7 @@ export const ProductDialog = ({
         formData.append(`file`, data.file[i]);
       }
     }
-    formData.append("image", JSON.stringify(data.image));
+    if (formValue?.id) formData.append("image", JSON.stringify(data.image));
     formData.append("name", data.name);
     formData.append("price", data.price);
     formData.append("description", data.description || "");

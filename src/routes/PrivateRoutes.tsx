@@ -14,7 +14,7 @@ export const PrivateRoutes: React.FC = () => {
         console.log('[Auth] Token expired or near expiry, refreshing...');
         await refreshToken();
       }
-    }, (userProfile.exp - now) * 1000);
+    }, (userProfile?.exp - now) * 1000);
     return () => clearInterval(interval);
   }, [token, isTokenExpired, refreshToken, userProfile]);
 
