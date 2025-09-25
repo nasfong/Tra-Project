@@ -1,13 +1,12 @@
 name: Docker Build and Push
 
-# This workflow can be triggered manually from the Actions tab
 on:
   workflow_dispatch:
     inputs:
       action:
         description: 'Choose action to perform'
         required: true
-        default: 'build'
+        default: 'build-and-push'
         type: choice
         options:
         - build
@@ -15,60 +14,27 @@ on:
         - build-and-push
 
 jobs:
-  docker-build:
+  docker:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.action == 'build' || github.event.inputs.action == 'build-and-push' }}
-    
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      
-    - name: Login to Docker Hub
-      if: ${{ github.event.inputs.action == 'build-and-push' }}
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    
-    - name: Run make build
-      run: make build
-      
-    - name: Upload build artifacts (optional)
-      if: ${{ github.event.inputs.action == 'build' }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: docker-build-output
-        path: |
-          # Add paths to any build outputs you want to preserve
-          # For example: ./dist/
-          # ./build/
-        retention-days: 7
 
-  docker-push:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.action == 'push' || github.event.inputs.action == 'build-and-push' }}
-    needs: docker-build
-    # Remove the needs line above if you want push to work independently
-    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-      
+
     - name: Login to Docker Hub
+      if: ${{ github.event.inputs.action == 'push' || github.event.inputs.action == 'build-and-push' }}
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    
-    - name: Run make build (if push-only)
-      if: ${{ github.event.inputs.action == 'push' }}
+
+    - name: Run make build
+      if: ${{ github.event.inputs.action == 'build' || github.event.inputs.action == 'build-and-push' }}
       run: make build
-      
+
     - name: Run make push
+      if: ${{ github.event.inputs.action == 'push' || github.event.inputs.action == 'build-and-push' }}
       run: make push
