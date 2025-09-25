@@ -1,6 +1,6 @@
 const API_URL = window.__ENV__?.VITE_API_URL || "http://localhost:5000";
 
-const imageUrl = API_URL + '/api/image/'
+const imageUrl = window.__ENV__?.VITE_IMAGE_URL
 
 const stock = [
   { id: 1, name: "In Stock" },
