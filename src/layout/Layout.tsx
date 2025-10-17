@@ -5,11 +5,14 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Outlet } from "react-router-dom";
+import RouteTracker from "@/analytics/RouteTracker";
 
 export const Layout = () => {
   const { open } = useSidebar();
   return (
     <SidebarLayout defaultOpen={open}>
+      <RouteTracker />
+
       <AppSidebar />
       <main className="flex flex-1 flex-col p-2 transition-all duration-300 ease-in-out">
         <div className="h-full rounded-md border-2 border-dashed p-2">

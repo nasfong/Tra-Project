@@ -15,7 +15,7 @@ pull:
 build-and-push: build push
 
 # Pull and run the Docker image
-pull-and-run: pull
+run: pull
 	docker run -p 5000:5000 --rm $(IMAGE_NAME):$(TAG)
 
 # Clean up unused Docker images and containers
